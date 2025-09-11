@@ -91,14 +91,17 @@
                     </button>
                 </div>
             </section>
-            <section id="expenses">
-                <h2>Expenses</h2>
-                <canvas id="expensesChart"></canvas>
-            </section>
-            <section id="budget">
-                <h2>Budget</h2>
-                <canvas id="budgetChart"></canvas>
-            </section>
+
+            <!-- Dashboard Content Grid -->
+            <div class="dashboard-grid">
+                <!-- Categories Overview -->
+                <section class="categories-section" aria-labelledby="categories-heading">
+                    <h2 id="categories-heading">Spending by Category</h2>
+                    <div class="categories-container" id="categories-container">
+                        <!-- Categories will be dynamically generated -->
+                    </div>
+                </section>
+            </div>
         </main>
         <footer>
             <p>&copy; 2023 Personal Finance Dashboard</p>
