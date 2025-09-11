@@ -32,22 +32,77 @@
         </nav>
     </header>
     <main>
-        <section id="income">
-            <h2>Income</h2>
-            <canvas id="incomeChart"></canvas>
-        </section>
-        <section id="expenses">
-            <h2>Expenses</h2>
-            <canvas id="expensesChart"></canvas>
-        </section>
-        <section id="budget">
-            <h2>Budget</h2>
-            <canvas id="budgetChart"></canvas>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2023 Personal Finance Dashboard</p>
-    </footer>
+        <!-- Main Content -->
+        <main class="main" role="main">
+            <!-- Hero Section with Balance Overview -->
+            <section class="hero-section" aria-labelledby="balance-heading">
+                <h2 id="balance-heading" class="visually-hidden">Financial Overview</h2>
+                <div class="balance-card">
+                    <div class="balance-info">
+                        <p class="balance-label">Current Balance</p>
+                        <h3 class="balance-amount" id="current-balance">$0.00</h3>
+                    </div>
+                    <div class="balance-trend">
+                        <span class="trend-indicator" id="balance-trend">+0%</span>
+                        <p class="trend-period">vs last month</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Stats Cards -->
+            <section class="stats-section" aria-labelledby="stats-heading">
+                <h2 id="stats-heading" class="visually-hidden">Monthly Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card income">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Income</p>
+                            <p class="stat-amount" id="total-income">$0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card expense">
+                        <div class="stat-icon">💸</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Expenses</p>
+                            <p class="stat-amount" id="total-expenses">$0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card savings">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Savings Rate</p>
+                            <p class="stat-amount" id="savings-rate">0%</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="actions-section" aria-labelledby="actions-heading">
+                <h2 id="actions-heading">Quick Actions</h2>
+                <div class="actions-grid">
+                    <button class="action-btn primary" id="add-transaction-btn" aria-label="Add new transaction">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">Add Transaction</span>
+                    </button>
+                    <button class="action-btn secondary" id="filter-btn" aria-label="Filter transactions">
+                        <span class="btn-icon">🔍</span>
+                        <span class="btn-text">Filter & Search</span>
+                    </button>
+                </div>
+            </section>
+            <section id="expenses">
+                <h2>Expenses</h2>
+                <canvas id="expensesChart"></canvas>
+            </section>
+            <section id="budget">
+                <h2>Budget</h2>
+                <canvas id="budgetChart"></canvas>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2023 Personal Finance Dashboard</p>
+        </footer>
 </body>
 
 </body>
