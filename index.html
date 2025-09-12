@@ -166,12 +166,31 @@
             </form>
         </div>
     </div>
+    <!-- Filter Modal -->
+    <div class="modal" id="filter-modal" role="dialog" aria-labelledby="filter-modal-title" aria-hidden="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="filter-modal-title">Filter Transactions</h2>
+                <button class="modal-close" aria-label="Close filter modal">✕</button>
+            </header>
+            <form class="filter-form" id="filter-form">
+                <div class="form-group">
+                    <label for="filter-period">Time Period</label>
+                    <select id="filter-period" name="period">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+            </form>
 
-    <footer>
-        <p>&copy; 2023 Personal Finance Dashboard</p>
-    </footer>
-</body>
-
+            <footer>
+                <p>&copy; 2023 Personal Finance Dashboard</p>
+            </footer>
 </body>
 
 </html>
