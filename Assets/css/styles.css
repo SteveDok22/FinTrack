@@ -299,3 +299,22 @@ body {
 .stat-card.income {
     border-left-color: var(--color-success);
 }
+
+.stat-card.expense {
+    border-left-color: var(--color-error);
+}
+
+.stat-card.savings {
+    border-left-color: var(--color-info);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--color-light-green), var(--color-neon-green));
+    border-radius: var(--radius-lg);
+}
