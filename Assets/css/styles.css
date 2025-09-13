@@ -177,3 +177,14 @@ body {
     background-color: var(--color-neon-green);
     border-radius: 1px;
 }
+
+/* ===========================================
+   Main Layout
+   =========================================== */
+
+.main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    min-height: calc(100vh - 80px);
+}
