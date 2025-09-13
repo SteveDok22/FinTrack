@@ -188,3 +188,24 @@ body {
     padding: var(--spacing-xl) var(--spacing-lg);
     min-height: calc(100vh - 80px);
 }
+
+/* ===========================================
+   Hero Section - Balance Overview
+   =========================================== */
+
+.hero-section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.balance-card {
+    background: linear-gradient(135deg, var(--color-white) 0%, var(--color-light-green) 100%);
+    border: 2px solid var(--color-neon-green);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
