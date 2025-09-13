@@ -318,3 +318,23 @@ body {
     background: linear-gradient(135deg, var(--color-light-green), var(--color-neon-green));
     border-radius: var(--radius-lg);
 }
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-label {
+    color: var(--color-gray-600);
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-amount {
+    color: var(--color-gray-900);
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+}
