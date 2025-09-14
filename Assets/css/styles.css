@@ -495,3 +495,14 @@ body {
     height: 300px;
     margin-top: var(--spacing-lg);
 }
+
+/* ===========================================
+   Recent Transactions
+   =========================================== */
+
+.recent-transactions {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+} 
