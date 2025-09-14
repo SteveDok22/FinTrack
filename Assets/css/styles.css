@@ -561,3 +561,59 @@ body {
 .transaction-amount.expense {
     color: var(--color-error);
 }
+
+.view-all-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-neon-green);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.view-all-link:hover {
+    color: var(--color-dark-green);
+}
+
+/* ===========================================
+   Responsive Design
+   =========================================== */
+
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+
+    .nav-menu {
+        gap: var(--spacing-md);
+    }
+
+    .main {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .balance-card {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        text-align: center;
+    }
+
+    .balance-amount {
+        font-size: 2.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
