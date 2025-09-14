@@ -524,3 +524,40 @@ body {
     border-left: 3px solid var(--color-gray-300);
     transition: all var(--transition-fast);
 }
+
+.transaction-item:hover {
+    background-color: var(--color-light-green);
+    border-left-color: var(--color-neon-green);
+}
+
+.transaction-item.income {
+    border-left-color: var(--color-success);
+}
+
+.transaction-item.expense {
+    border-left-color: var(--color-error);
+}
+
+.transaction-details h4 {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-xs);
+}
+
+.transaction-details p {
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+}
+
+.transaction-amount {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.transaction-amount.income {
+    color: var(--color-success);
+}
+
+.transaction-amount.expense {
+    color: var(--color-error);
+}
