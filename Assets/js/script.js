@@ -46,3 +46,17 @@ function initializeApp() {
         showNotification('Failed to load application. Please refresh the page.', 'error');
     }
 }
+
+/**
+ * Load application data from storage
+ */
+function loadApplicationData() {
+    // Load transactions from storage
+    App.transactions = getTransactions();
+
+    // Load categories from storage
+    App.categories = getCategories();
+
+    // Load user settings
+    App.settings = getSettings();
+}
