@@ -60,3 +60,27 @@ function loadApplicationData() {
     // Load user settings
     App.settings = getSettings();
 }
+/**
+ * Initialize UI components and modals
+ */
+function initializeUI() {
+    // Initialize modals
+    initializeModals();
+
+    // Initialize navigation
+    initializeNavigation();
+
+    // Initialize dashboard if on main page
+    if (document.getElementById('current-balance')) {
+        initializeDashboard();
+    }
+
+    // Set today's date as default for transaction forms
+    const dateInputs = document.querySelectorAll('input[type="date"]');
+    const today = new Date().toISOString().split('T')[0];
+    dateInputs.forEach(input => {
+        if (!input.value) {
+            input.value = today;
+        }
+    });
+}
