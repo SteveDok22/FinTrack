@@ -257,3 +257,38 @@ function handleFilterSubmit(event) {
     closeModal();
     showNotification('Filters applied successfully!', 'success');
 }
+
+/**
+ * Validate transaction data
+ */
+function validateTransaction(transaction) {
+    const errors = [];
+
+    // Validate type
+    if (!transaction.type || !['income', 'expense'].includes(transaction.type)) {
+        errors.push('Please select a valid transaction type');
+    }
+
+    // Validate amount
+    if (!transaction.amount || transaction.amount <= 0) {
+        errors.push('Please enter a valid amount greater than 0');
+    }
+
+    // Validate category
+    if (!transaction.category) {
+        errors.push('Please select a category');
+    }
+
+    // Validate date
+    if (!transaction.date) {
+        errors.push('Please select a date');
+    }
+
+    // Show errors if any
+    if (errors.length > 0) {
+        showNotification(errors.join('. '), 'error');
+        return false;
+    }
+
+    return true;
+}
