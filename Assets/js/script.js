@@ -173,3 +173,13 @@ function openAddTransactionModal() {
     }
 }
 
+/**
+ * Open filter modal
+ */
+function openFilterModal() {
+    const modal = document.getElementById('filter-modal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+}
