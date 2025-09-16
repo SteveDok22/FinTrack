@@ -292,3 +292,20 @@ function validateTransaction(transaction) {
 
     return true;
 }
+
+/**
+ * Apply filters to current view
+ */
+function applyFilters(filters) {
+    // Store current filters
+    App.currentFilters = filters;
+
+    // Apply filters based on current page
+    if (typeof applyDashboardFilters === 'function') {
+        applyDashboardFilters(filters);
+    }
+
+    if (typeof applyTransactionFilters === 'function') {
+        applyTransactionFilters(filters);
+    }
+}
