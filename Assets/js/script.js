@@ -155,3 +155,21 @@ function handleNavigation(event) {
     navLinks.forEach(link => link.classList.remove('active'));
     event.target.classList.add('active');
 }
+
+/**
+ * Open add transaction modal
+ */
+function openAddTransactionModal() {
+    const modal = document.getElementById('transaction-modal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+
+        // Focus first input
+        const firstInput = modal.querySelector('input, select');
+        if (firstInput) {
+            setTimeout(() => firstInput.focus(), 100);
+        }
+    }
+}
+
