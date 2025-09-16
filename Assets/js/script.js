@@ -309,3 +309,4 @@ function applyFilters(filters) {
         applyTransactionFilters(filters);
     }
 }
+
