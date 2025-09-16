@@ -84,3 +84,56 @@ function initializeUI() {
         }
     });
 }
+
+/**
+ * Set up global event listeners
+ */
+function setupEventListeners() {
+    // Navigation clicks
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', handleNavigation);
+    });
+
+    // Modal controls
+    const addTransactionBtn = document.getElementById('add-transaction-btn');
+    if (addTransactionBtn) {
+        addTransactionBtn.addEventListener('click', openAddTransactionModal);
+    }
+
+    const filterBtn = document.getElementById('filter-btn');
+    if (filterBtn) {
+        filterBtn.addEventListener('click', openFilterModal);
+    }
+
+    // Modal close buttons
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
+    modalCloseButtons.forEach(button => {
+        button.addEventListener('click', closeModal);
+    });
+
+    // Modal overlay clicks
+    const modalOverlays = document.querySelectorAll('.modal-overlay');
+    modalOverlays.forEach(overlay => {
+        overlay.addEventListener('click', closeModal);
+    });
+
+    // Transaction form submission
+    const transactionForm = document.getElementById('transaction-form');
+    if (transactionForm) {
+        transactionForm.addEventListener('submit', handleTransactionSubmit);
+    }
+
+    // Filter form submission
+    const filterForm = document.getElementById('filter-form');
+    if (filterForm) {
+        filterForm.addEventListener('submit', handleFilterSubmit);
+    }
+
+    // ESC key to close modals
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+}
