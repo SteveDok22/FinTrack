@@ -183,3 +183,18 @@ function openFilterModal() {
         modal.setAttribute('aria-hidden', 'false');
     }
 }
+
+/**
+ * Close all modals
+ */
+function closeModal() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+    });
+    
+    // Clear form data
+    const forms = document.querySelectorAll('.modal form');
+    forms.forEach(form => form.reset());
+}
