@@ -237,3 +237,23 @@ function handleTransactionSubmit(event) {
         showNotification('Failed to add transaction. Please try again.', 'error');
     }
 }
+
+/**
+ * Handle filter form submission
+ */
+function handleFilterSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const filters = {
+        period: formData.get('period'),
+        type: formData.get('type'),
+        category: formData.get('category')
+    };
+
+    // Apply filters (implementation depends on current page)
+    applyFilters(filters);
+
+    closeModal();
+    showNotification('Filters applied successfully!', 'success');
+}
