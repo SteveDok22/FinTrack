@@ -310,3 +310,28 @@ function applyFilters(filters) {
     }
 }
 
+/**
+ * Populate category dropdowns
+ */
+function populateCategoryDropdowns() {
+    const categorySelects = document.querySelectorAll('select[name="category"], #filter-category');
+    const categories = getCategories();
+
+    categorySelects.forEach(select => {
+        // Clear existing options (except first)
+        const firstOption = select.querySelector('option');
+        select.innerHTML = '';
+        if (firstOption) {
+            select.appendChild(firstOption);
+        }
+
+        // Add category options
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            select.appendChild(option);
+        });
+    });
+}
+
