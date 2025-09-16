@@ -137,3 +137,21 @@ function setupEventListeners() {
         }
     });
 }
+
+/**
+ * Initialize modal functionality
+ */
+function initializeModals() {
+    // Populate category dropdowns
+    populateCategoryDropdowns();
+}
+
+/**
+ * Handle navigation between pages
+ */
+function handleNavigation(event) {
+    // Update active navigation state
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => link.classList.remove('active'));
+    event.target.classList.add('active');
+}
