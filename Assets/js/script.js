@@ -335,3 +335,34 @@ function populateCategoryDropdowns() {
     });
 }
 
+/**
+ * Show notification to user
+ */
+function showNotification(message, type = 'info') {
+    const notification = document.getElementById('notification');
+    const messageElement = document.getElementById('notification-message');
+
+    if (notification && messageElement) {
+        messageElement.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            hideNotification();
+        }, 5000);
+    } else {
+        // Fallback to console if notification element not found
+        console.log(`${type.toUpperCase()}: ${message}`);
+    }
+}
+
+/**
+ * Hide notification
+ */
+function hideNotification() {
+    const notification = document.getElementById('notification');
+    if (notification) {
+        notification.style.display = 'none';
+    }
+}
