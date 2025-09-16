@@ -193,8 +193,24 @@ function closeModal() {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
     });
-    
+
     // Clear form data
     const forms = document.querySelectorAll('.modal form');
     forms.forEach(form => form.reset());
 }
+
+/**
+ * Handle transaction form submission
+ */
+function handleTransactionSubmit(event) {
+    event.preventDefault();
+
+    try {
+        const formData = new FormData(event.target);
+        const transactionData = {
+            type: formData.get('type'),
+            amount: parseFloat(formData.get('amount')),
+            category: formData.get('category'),
+            description: formData.get('description') || '',
+            date: formData.get('date')
+        };
