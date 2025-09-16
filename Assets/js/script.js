@@ -214,3 +214,26 @@ function handleTransactionSubmit(event) {
             description: formData.get('description') || '',
             date: formData.get('date')
         };
+
+        // Validate transaction data
+        if (validateTransaction(transactionData)) {
+            // Add transaction
+            addTransaction(transactionData);
+
+            // Close modal
+            closeModal();
+
+            // Refresh dashboard if on main page
+            if (typeof refreshDashboard === 'function') {
+                refreshDashboard();
+            }
+
+            // Show success notification
+            showNotification('Transaction added successfully!', 'success');
+        }
+
+    } catch (error) {
+        console.error('Error adding transaction:', error);
+        showNotification('Failed to add transaction. Please try again.', 'error');
+    }
+}
