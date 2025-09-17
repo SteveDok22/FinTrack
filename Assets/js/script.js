@@ -392,3 +392,18 @@ window.addEventListener('error', function (e) {
     console.error('Global error:', e.error);
     showNotification('An unexpected error occurred. Please refresh the page.', 'error');
 });
+
+/**
+ * Handle unhandled promise rejections
+ */
+window.addEventListener('unhandledrejection', function (e) {
+    console.error('Unhandled promise rejection:', e.reason);
+    showNotification('An error occurred while processing your request.', 'error');
+});
+
+// Close notification when clicking the close button
+document.addEventListener('click', function (e) {
+    if (e.target.id === 'notification-close') {
+        hideNotification();
+    }
+});
