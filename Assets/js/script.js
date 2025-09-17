@@ -385,3 +385,10 @@ function initializeNavigation() {
         }
     });
 }
+/**
+ * Handle errors gracefully
+ */
+window.addEventListener('error', function (e) {
+    console.error('Global error:', e.error);
+    showNotification('An unexpected error occurred. Please refresh the page.', 'error');
+});
