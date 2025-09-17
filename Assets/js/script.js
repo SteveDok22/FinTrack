@@ -366,3 +366,22 @@ function hideNotification() {
         notification.style.display = 'none';
     }
 }
+/**
+ * Initialize navigation state
+ */
+function initializeNavigation() {
+    // Set active navigation based on current page
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && currentPath.includes(href.replace('./', ''))) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+        } else {
+            link.classList.remove('active');
+            link.removeAttribute('aria-current');
+        }
+    });
+}
