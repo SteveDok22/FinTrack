@@ -335,4 +335,4 @@ function isSameMonth(date1, date2) {
     const d2 = new Date(date2);
     
     return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth();
-}
+} 
