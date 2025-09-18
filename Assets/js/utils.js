@@ -298,3 +298,28 @@ function sortBy(array, property, order = 'asc') {
         }
     });
 }
+
+/**
+ * Filter transactions by date range
+ * @param {Array} transactions - Array of transactions
+ * @param {string} startDate - Start date (YYYY-MM-DD)
+ * @param {string} endDate - End date (YYYY-MM-DD)
+ * @returns {Array} Filtered transactions
+ */
+function filterTransactionsByDateRange(transactions, startDate, endDate) {
+    return transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.date);
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        return transactionDate >= start && transactionDate <= end;
+    });
+}
+
+/**
+ * Get today's date in YYYY-MM-DD format
+ * @returns {string} Today's date
+ */
+function getTodayString() {
+    return new Date().toISOString().split('T')[0];
+}
