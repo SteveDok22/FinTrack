@@ -272,3 +272,29 @@ function getCategoryColor(categoryId) {
     
     return colors[categoryId] || colors.other;
 }
+
+/**
+ * Sort array by property
+ * @param {Array} array - Array to sort
+ * @param {string} property - Property to sort by
+ * @param {string} order - Sort order ('asc' or 'desc')
+ * @returns {Array} Sorted array
+ */
+function sortBy(array, property, order = 'asc') {
+    return array.sort((a, b) => {
+        let aVal = a[property];
+        let bVal = b[property];
+        
+        // Handle dates
+        if (property === 'date') {
+            aVal = new Date(aVal);
+            bVal = new Date(bVal);
+        }
+        
+        if (order === 'desc') {
+            return bVal > aVal ? 1 : bVal < aVal ? -1 : 0;
+        } else {
+            return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+        }
+    });
+}
