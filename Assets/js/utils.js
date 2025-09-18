@@ -216,3 +216,13 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+
+/**
+ * Format number with thousand separators
+ * @param {number} num - Number to format
+ * @returns {string} Formatted number
+ */
+function formatNumber(num) {
+    if (isNaN(num)) return '0';
+    return num.toLocaleString('en-US');
+}
