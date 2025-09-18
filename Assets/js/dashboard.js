@@ -129,4 +129,291 @@ function updateCategoriesDisplay() {
     } catch (error) {
         console.error('Failed to update categories display:', error);
     }
+}/**
+ * Create category card element
+ * @param {Object} category - Category object with spending data
+ * @returns {HTMLElement} Category card element
+ */
+function createCategoryCard(category) {
+    const card = document.createElement('div');
+    card.className = 'category-card';
+    
+    const budgetProgress = category.budget > 0 ? 
+        Math.min(100, (category.spent / category.budget) * 100) : 0;
+    
+    const progressClass = budgetProgress > 100 ? 'over-budget' : 
+                         budgetProgress > 80 ? 'near-budget' : 'within-budget';
+    
+    card.innerHTML = `
+        <div class="category-info">
+            <div class="category-icon">${category.icon}</div>
+            <div class="category-details">
+                <div class="category-name">${category.name}</div>
+                ${category.budget > 0 ? 
+                    `<div class="category-budget">
+                        <div class="budget-progress ${progressClass}">
+                            <div class="progress-bar" style="width: ${Math.min(100, budgetProgress)}%"></div>
+                        </div>
+                        <div class="budget-text">${formatCurrency(category.spent)} / ${formatCurrency(category.budget)}</div>
+                    </div>` 
+                    : ''
+                }
+            </div>
+        </div>
+        <div class="category-amount">${formatCurrency(category.spent)}</div>
+    `;
+    
+    return card;
 }
+
+/**
+ * Update recent transactions list
+ */
+function updateRecentTransactionsList() {
+    const container = document.getElementById('recent-transactions-list');
+    if (!container) return;
+    
+    try {
+        const recentTransactions = getRecentTransactions(5);
+        container.innerHTML = '';
+        
+        if (recentTransactions.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p>No transactions yet</p>
+                    <button class="btn primary" onclick="openAddTransactionModal()">Add Your First Transaction</button>
+                </div>
+            `;
+            return;
+        }
+        
+        recentTransactions.forEach(transaction => {
+            const transactionElement = createTransactionElement(transaction);
+            container.appendChild(transactionElement);
+        });
+        
+    } catch (error) {
+        console.error('Failed to update recent transactions:', error);
+    }
+}
+
+/**
+ * Create transaction element
+ * @param {Object} transaction - Transaction object
+ * @returns {HTMLElement} Transaction element
+ */
+function createTransactionElement(transaction) {
+    const element = document.createElement('div');
+    element.className = `transaction-item ${transaction.type}`;
+    
+    const category = getCategoryById(transaction.category);
+    const categoryName = category ? category.name : 'Unknown';
+    const categoryIcon = category ? category.icon : '📋';
+    
+    const amountClass = transaction.type === 'income' ? 'income' : 'expense';
+    const amountPrefix = transaction.type === 'income' ? '+' : '-';
+    
+    element.innerHTML = `
+        <div class="transaction-details">
+            <div class="transaction-header">
+                <span class="transaction-icon">${categoryIcon}</span>
+                <h4>${transaction.description || categoryName}</h4>
+            </div>
+            <p class="transaction-meta">${categoryName} • ${getRelativeDate(transaction.date)}</p>
+        </div>
+        <div class="transaction-amount ${amountClass}">
+            ${amountPrefix}${formatCurrency(transaction.amount)}
+        </div>
+    `;
+    
+    return element;
+}
+
+/**
+ * Initialize dashboard chart
+ */
+function initializeDashboardChart() {
+    const chartCanvas = document.getElementById('expense-chart');
+    if (!chartCanvas) return;
+    
+    try {
+        // Destroy existing chart if it exists
+        if (window.dashboardChart) {
+            window.dashboardChart.destroy();
+        }
+        
+        const expensesByCategory = calculateExpensesByCategory('month');
+        const categories = getCategoriesByType('expense');
+        
+        // Filter out categories with no spending
+        const dataWithSpending = categories
+            .filter(cat => expensesByCategory[cat.id] > 0)
+            .map(cat => ({
+                label: cat.name,
+                value: expensesByCategory[cat.id],
+                color: cat.color
+            }));
+        
+        if (dataWithSpending.length === 0) {
+            chartCanvas.style.display = 'none';
+            const container = chartCanvas.parentElement;
+            container.innerHTML = `
+                <div class="empty-chart-state">
+                    <p>No expense data to display</p>
+                    <button class="btn primary" onclick="openAddTransactionModal()">Add Expense</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Create pie chart
+        const ctx = chartCanvas.getContext('2d');
+        window.dashboardChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: dataWithSpending.map(d => d.label),
+                datasets: [{
+                    data: dataWithSpending.map(d => d.value),
+                    backgroundColor: dataWithSpending.map(d => d.color),
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${context.label}: ${formatCurrency(value)} (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+        
+    } catch (error) {
+        console.error('Failed to initialize dashboard chart:', error);
+    }
+}
+
+/**
+ * Set up dashboard-specific event listeners
+ */
+function setupDashboardEventListeners() {
+    // Transaction form category change - update type automatically
+    const typeSelect = document.getElementById('transaction-type');
+    const categorySelect = document.getElementById('transaction-category');
+    
+    if (typeSelect && categorySelect) {
+        typeSelect.addEventListener('change', function() {
+            updateCategoryOptions(this.value);
+        });
+    }
+    
+    // Quick filter buttons (if they exist)
+    const quickFilters = document.querySelectorAll('.quick-filter');
+    quickFilters.forEach(filter => {
+        filter.addEventListener('click', function() {
+            const period = this.dataset.period;
+            applyDashboardFilters({ period });
+        });
+    });
+}
+
+/**
+ * Update category options based on transaction type
+ * @param {string} transactionType - 'income' or 'expense'
+ */
+function updateCategoryOptions(transactionType) {
+    const categorySelect = document.getElementById('transaction-category');
+    if (!categorySelect) return;
+    
+    const categories = getCategoriesByType(transactionType);
+    
+    // Clear existing options except first
+    const firstOption = categorySelect.querySelector('option');
+    categorySelect.innerHTML = '';
+    if (firstOption) {
+        categorySelect.appendChild(firstOption);
+    }
+    
+    // Add filtered category options
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = `${category.icon} ${category.name}`;
+        categorySelect.appendChild(option);
+    });
+}
+
+/**
+ * Apply filters to dashboard data
+ * @param {Object} filters - Filter options
+ */
+function applyDashboardFilters(filters) {
+    // Store current filters
+    window.dashboardFilters = filters;
+    
+    // Refresh dashboard with filters
+    refreshDashboard();
+    
+    console.log('Dashboard filters applied:', filters);
+}
+
+/**
+ * Calculate last month's balance for trend calculation
+ * @returns {number} Last month's balance
+ */
+function calculateLastMonthBalance() {
+    try {
+        const now = new Date();
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+        
+        const startDate = lastMonth.toISOString().split('T')[0];
+        const endDate = lastMonthEnd.toISOString().split('T')[0];
+        
+        const transactions = getTransactions();
+        const lastMonthTransactions = filterTransactionsByDateRange(transactions, startDate, endDate);
+        
+        const income = lastMonthTransactions
+            .filter(t => t.type === 'income')
+            .reduce((sum, t) => sum + t.amount, 0);
+            
+        const expenses = lastMonthTransactions
+            .filter(t => t.type === 'expense')
+            .reduce((sum, t) => sum + t.amount, 0);
+            
+        return income - expenses;
+        
+    } catch (error) {
+        console.error('Failed to calculate last month balance:', error);
+        return 0;
+    }
+}
+
+/**
+ * Handle window resize for responsive charts
+ */
+window.addEventListener('resize', debounce(() => {
+    if (window.dashboardChart) {
+        window.dashboardChart.resize();
+    }
+}, 250));

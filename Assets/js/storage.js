@@ -201,3 +201,219 @@ function updateTransaction(id, updates) {
         throw new Error('Failed to update transaction');
     }
 }
+
+/**
+ * Delete transaction
+ * @param {string} id - Transaction ID
+ * @returns {boolean} True if deleted, false if not found
+ */
+function deleteTransaction(id) {
+    try {
+        const transactions = getTransactions();
+        const filteredTransactions = transactions.filter(t => t.id !== id);
+        
+        if (filteredTransactions.length === transactions.length) {
+            return false; // Transaction not found
+        }
+        
+        saveTransactions(filteredTransactions);
+        return true;
+    } catch (error) {
+        console.error('Failed to delete transaction:', error);
+        throw new Error('Failed to delete transaction');
+    }
+}
+
+/**
+ * Get transactions by type
+ * @param {string} type - Transaction type ('income' or 'expense')
+ * @returns {Array} Filtered transactions
+ */
+function getTransactionsByType(type) {
+    const transactions = getTransactions();
+    return transactions.filter(t => t.type === type);
+}
+
+/**
+ * Get transactions by category
+ * @param {string} categoryId - Category ID
+ * @returns {Array} Filtered transactions
+ */
+function getTransactionsByCategory(categoryId) {
+    const transactions = getTransactions();
+    return transactions.filter(t => t.category === categoryId);
+}
+
+/**
+ * Get transactions for current month
+ * @returns {Array} Current month transactions
+ */
+function getCurrentMonthTransactions() {
+    const transactions = getTransactions();
+    const { start, end } = getCurrentMonthRange();
+    
+    return filterTransactionsByDateRange(transactions, start, end);
+}
+
+/**
+ * Get categories from storage
+ * @returns {Array} Array of category objects
+ */
+function getCategories() {
+    try {
+        const data = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+        return data ? JSON.parse(data) : DEFAULT_CATEGORIES;
+    } catch (error) {
+        console.error('Failed to get categories:', error);
+        return DEFAULT_CATEGORIES;
+    }
+}
+
+/**
+ * Save categories to storage
+ * @param {Array} categories - Array of category objects
+ */
+function saveCategories(categories) {
+    try {
+        localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+    } catch (error) {
+        console.error('Failed to save categories:', error);
+        throw new Error('Failed to save categories');
+    }
+}
+
+/**
+ * Get categories by type
+ * @param {string} type - Category type ('income' or 'expense')
+ * @returns {Array} Filtered categories
+ */
+function getCategoriesByType(type) {
+    const categories = getCategories();
+    return categories.filter(c => c.type === type);
+}
+
+/**
+ * Get category by ID
+ * @param {string} id - Category ID
+ * @returns {Object|null} Category object or null if not found
+ */
+function getCategoryById(id) {
+    const categories = getCategories();
+    return categories.find(c => c.id === id) || null;
+}
+
+/**
+ * Get settings from storage
+ * @returns {Object} Settings object
+ */
+function getSettings() {
+    try {
+        const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+        return data ? { ...DEFAULT_SETTINGS, ...JSON.parse(data) } : DEFAULT_SETTINGS;
+    } catch (error) {
+        console.error('Failed to get settings:', error);
+        return DEFAULT_SETTINGS;
+    }
+}
+
+/**
+ * Save settings to storage
+ * @param {Object} settings - Settings object
+ */
+function saveSettings(settings) {
+    try {
+        localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    } catch (error) {
+        console.error('Failed to save settings:', error);
+        throw new Error('Failed to save settings');
+    }
+}
+
+/**
+ * Get budget for category
+ * @param {string} categoryId - Category ID
+ * @returns {number} Budget amount
+ */
+function getBudget(categoryId) {
+    const settings = getSettings();
+    return settings.budgets[categoryId] || 0;
+}
+
+/**
+ * Set budget for category
+ * @param {string} categoryId - Category ID
+ * @param {number} amount - Budget amount
+ */
+function setBudget(categoryId, amount) {
+    const settings = getSettings();
+    settings.budgets[categoryId] = amount;
+    saveSettings(settings);
+}
+
+/**
+ * Calculate total income for period
+ * @param {string} period - Time period ('month', 'week', 'year', etc.)
+ * @returns {number} Total income
+ */
+function calculateTotalIncome(period = 'month') {
+    const { start, end } = getDateRange(period);
+    const transactions = getTransactions();
+    const incomeTransactions = filterTransactionsByDateRange(transactions, start, end)
+        .filter(t => t.type === 'income');
+    
+    return incomeTransactions.reduce((total, t) => total + t.amount, 0);
+}
+
+/**
+ * Calculate total expenses for period
+ * @param {string} period - Time period ('month', 'week', 'year', etc.)
+ * @returns {number} Total expenses
+ */
+function calculateTotalExpenses(period = 'month') {
+    const { start, end } = getDateRange(period);
+    const transactions = getTransactions();
+    const expenseTransactions = filterTransactionsByDateRange(transactions, start, end)
+        .filter(t => t.type === 'expense');
+    
+    return expenseTransactions.reduce((total, t) => total + t.amount, 0);
+}
+
+/**
+ * Calculate balance for period
+ * @param {string} period - Time period ('month', 'week', 'year', etc.)
+ * @returns {number} Balance (income - expenses)
+ */
+function calculateBalance(period = 'month') {
+    const income = calculateTotalIncome(period);
+    const expenses = calculateTotalExpenses(period);
+    return income - expenses;
+}
+
+/**
+ * Calculate expenses by category for period
+ * @param {string} period - Time period ('month', 'week', 'year', etc.)
+ * @returns {Object} Object with category totals
+ */
+function calculateExpensesByCategory(period = 'month') {
+    const { start, end } = getDateRange(period);
+    const transactions = getTransactions();
+    const expenses = filterTransactionsByDateRange(transactions, start, end)
+        .filter(t => t.type === 'expense');
+    
+    const categoryTotals = {};
+    const categories = getCategories();
+    
+    // Initialize all expense categories with 0
+    categories.filter(c => c.type === 'expense').forEach(cat => {
+        categoryTotals[cat.id] = 0;
+    });
+    
+    // Sum expenses by category
+    expenses.forEach(transaction => {
+        if (categoryTotals.hasOwnProperty(transaction.category)) {
+            categoryTotals[transaction.category] += transaction.amount;
+        }
+    });
+    
+    return categoryTotals;
+}
