@@ -417,3 +417,78 @@ function calculateExpensesByCategory(period = 'month') {
     
     return categoryTotals;
 }
+
+/**
+ * Get recent transactions
+ * @param {number} limit - Number of transactions to return
+ * @returns {Array} Recent transactions
+ */
+function getRecentTransactions(limit = 5) {
+    const transactions = getTransactions();
+    return sortBy(transactions, 'date', 'desc')
+        .slice(0, limit);
+}
+
+/**
+ * Clear all data (for reset functionality)
+ */
+function clearAllData() {
+    try {
+        Object.values(STORAGE_KEYS).forEach(key => {
+            localStorage.removeItem(key);
+        });
+        console.log('All data cleared successfully');
+    } catch (error) {
+        console.error('Failed to clear data:', error);
+        throw new Error('Failed to clear data');
+    }
+}
+
+/**
+ * Export data as JSON
+ * @returns {string} JSON string of all data
+ */
+function exportData() {
+    try {
+        const data = {
+            transactions: getTransactions(),
+            categories: getCategories(),
+            settings: getSettings(),
+            exportDate: new Date().toISOString()
+        };
+        
+        return JSON.stringify(data, null, 2);
+    } catch (error) {
+        console.error('Failed to export data:', error);
+        throw new Error('Failed to export data');
+    }
+}
+
+/**
+ * Import data from JSON
+ * @param {string} jsonData - JSON string containing data
+ * @returns {boolean} Success status
+ */
+function importData(jsonData) {
+    try {
+        const data = JSON.parse(jsonData);
+        
+        if (data.transactions) {
+            saveTransactions(data.transactions);
+        }
+        
+        if (data.categories) {
+            saveCategories(data.categories);
+        }
+        
+        if (data.settings) {
+            saveSettings(data.settings);
+        }
+        
+        console.log('Data imported successfully');
+        return true;
+    } catch (error) {
+        console.error('Failed to import data:', error);
+        return false;
+    }
+}
