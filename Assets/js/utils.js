@@ -323,3 +323,16 @@ function filterTransactionsByDateRange(transactions, startDate, endDate) {
 function getTodayString() {
     return new Date().toISOString().split('T')[0];
 }
+
+/**
+ * Check if two dates are in the same month
+ * @param {string|Date} date1 - First date
+ * @param {string|Date} date2 - Second date
+ * @returns {boolean} True if same month and year
+ */
+function isSameMonth(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    
+    return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth();
+}
