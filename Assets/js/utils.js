@@ -102,3 +102,50 @@ function isValidDate(dateStr) {
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
+
+/**
+ * Capitalize first letter of string
+ * @param {string} str - String to capitalize
+ * @returns {string} Capitalized string
+ */
+function capitalize(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+/**
+ * Truncate string with ellipsis
+ * @param {string} str - String to truncate
+ * @param {number} maxLength - Maximum length
+ * @returns {string} Truncated string
+ */
+function truncateString(str, maxLength = 50) {
+    if (!str) return '';
+    return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+}
+
+/**
+ * Calculate percentage
+ * @param {number} value - Current value
+ * @param {number} total - Total value
+ * @returns {number} Percentage (rounded to 1 decimal)
+ */
+function calculatePercentage(value, total) {
+    if (total === 0) return 0;
+    return Math.round((value / total) * 100 * 10) / 10;
+}
+
+/**
+ * Get current month date range
+ * @returns {object} Object with start and end dates
+ */
+function getCurrentMonthRange() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    
+    return {
+        start: new Date(year, month, 1).toISOString().split('T')[0],
+        end: new Date(year, month + 1, 0).toISOString().split('T')[0]
+    };
+}
