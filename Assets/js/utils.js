@@ -149,3 +149,52 @@ function getCurrentMonthRange() {
         end: new Date(year, month + 1, 0).toISOString().split('T')[0]
     };
 }
+
+/**
+ * Get date range based on period
+ * @param {string} period - Period type ('today', 'week', 'month', 'quarter', 'year')
+ * @returns {object} Object with start and end dates
+ */
+function getDateRange(period) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    switch (period) {
+        case 'today':
+            return {
+                start: today.toISOString().split('T')[0],
+                end: today.toISOString().split('T')[0]
+            };
+            
+        case 'week':
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - today.getDay());
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            return {
+                start: weekStart.toISOString().split('T')[0],
+                end: weekEnd.toISOString().split('T')[0]
+            };
+            
+        case 'month':
+            return getCurrentMonthRange();
+            
+        case 'quarter':
+            const quarter = Math.floor(now.getMonth() / 3);
+            const quarterStart = new Date(now.getFullYear(), quarter * 3, 1);
+            const quarterEnd = new Date(now.getFullYear(), quarter * 3 + 3, 0);
+            return {
+                start: quarterStart.toISOString().split('T')[0],
+                end: quarterEnd.toISOString().split('T')[0]
+            };
+            
+        case 'year':
+            return {
+                start: new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0],
+                end: new Date(now.getFullYear(), 11, 31).toISOString().split('T')[0]
+            };
+            
+        default:
+            return getCurrentMonthRange();
+    }
+}
