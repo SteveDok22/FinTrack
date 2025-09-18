@@ -226,3 +226,49 @@ function formatNumber(num) {
     if (isNaN(num)) return '0';
     return num.toLocaleString('en-US');
 }
+
+/**
+ * Get category icon by category ID
+ * @param {string} categoryId - Category identifier
+ * @returns {string} Category icon emoji
+ */
+function getCategoryIcon(categoryId) {
+    const icons = {
+        food: '🍕',
+        transport: '🚗',
+        entertainment: '🎬',
+        shopping: '🛒',
+        utilities: '💡',
+        healthcare: '🏥',
+        education: '📚',
+        salary: '💰',
+        freelance: '💻',
+        investment: '📈',
+        other: '📋'
+    };
+    
+    return icons[categoryId] || icons.other;
+}
+
+/**
+ * Get category color by category ID
+ * @param {string} categoryId - Category identifier
+ * @returns {string} Category color hex code
+ */
+function getCategoryColor(categoryId) {
+    const colors = {
+        food: '#FF6B6B',
+        transport: '#4ECDC4',
+        entertainment: '#45B7D1',
+        shopping: '#96CEB4',
+        utilities: '#FECA57',
+        healthcare: '#FF9FF3',
+        education: '#54A0FF',
+        salary: '#5F27CD',
+        freelance: '#00D2D3',
+        investment: '#FF9F43',
+        other: '#ADADAD'
+    };
+    
+    return colors[categoryId] || colors.other;
+}
