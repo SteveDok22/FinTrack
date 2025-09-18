@@ -19,6 +19,16 @@ A modern, responsive financial tracking application built with vanilla HTML, CSS
 
 **Purpose:** Create a comprehensive personal finance management application that helps users track expenses, manage budgets, and make informed financial decisions through intuitive visualizations.
 
+**Live Website:** [See deployed website](https://stevedok22.github.io/FinTrack/)
+
+<div align="center">
+
+![Product Pages Grid](assets/images/sceenshots/)
+
+*FinTrack website displayed across multiple devices - showcasing responsive design*
+
+</div>
+
 **Target Audience:** 
 - Young professionals starting their financial journey
 - Individuals seeking better expense tracking
