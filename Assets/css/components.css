@@ -496,3 +496,27 @@
   margin-bottom: var(--spacing-md);
   font-size: 1rem;
 }
+
+/* ===========================================
+   Loading States
+   =========================================== */
+
+.loading-skeleton {
+  background: linear-gradient(90deg, var(--color-gray-200) 25%, var(--color-gray-100) 50%, var(--color-gray-200) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: var(--spacing-xs);
+}
+
+.skeleton-text.large {
+  height: 1.5em;
+}
+
+.skeleton-text.small {
+  height: 0.75em;
+}
