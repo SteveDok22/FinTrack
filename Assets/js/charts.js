@@ -125,4 +125,118 @@ function createExpensePieChart(canvasId, period = 'month') {
         console.error('Error creating expense pie chart:', error);
         return createEmptyChart(canvas, 'Failed to load chart data');
     }
+} 
+
+/**
+ * Create income vs expenses line chart
+ * @param {string} canvasId - Canvas element ID
+ * @param {string} period - Time period for data
+ * @returns {Chart} Chart.js instance
+ */
+function createIncomeExpensesLineChart(canvasId, period = 'year') {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return null;
+
+    try {
+        // Get monthly data for the current year
+        const monthlyData = getMonthlyIncomeExpenseData();
+        
+        if (monthlyData.length === 0) {
+            return createEmptyChart(canvas, 'No transaction data available');
+        }
+
+        // Destroy existing chart
+        if (window.charts.analytics) {
+            window.charts.analytics.destroy();
+        }
+
+        const ctx = canvas.getContext('2d');
+        window.charts.analytics = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: monthlyData.map(d => d.month),
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: monthlyData.map(d => d.income),
+                        borderColor: CHART_COLORS.success,
+                        backgroundColor: CHART_COLORS.success + '20',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: CHART_COLORS.success,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2
+                    },
+                    {
+                        label: 'Expenses',
+                        data: monthlyData.map(d => d.expenses),
+                        borderColor: CHART_COLORS.error,
+                        backgroundColor: CHART_COLORS.error + '20',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: CHART_COLORS.error,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                ...DEFAULT_CHART_OPTIONS,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            },
+                            color: CHART_COLORS.gray,
+                            font: {
+                                family: 'Inter, system-ui, sans-serif'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: CHART_COLORS.gray,
+                            font: {
+                                family: 'Inter, system-ui, sans-serif'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    ...DEFAULT_CHART_OPTIONS.plugins,
+                    tooltip: {
+                        ...DEFAULT_CHART_OPTIONS.plugins.tooltip,
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].label;
+                            },
+                            label: function(context) {
+                                return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return window.charts.analytics;
+
+    } catch (error) {
+        console.error('Error creating income/expenses line chart:', error);
+        return createEmptyChart(canvas, 'Failed to load chart data');
+    }
 }
