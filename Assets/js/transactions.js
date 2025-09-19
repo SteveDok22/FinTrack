@@ -411,3 +411,43 @@ function resetAllFilters() {
     applyFilters();
     showNotification('Filters reset successfully', 'success');
 }
+
+/**
+ * Clear search input
+ */
+function clearSearchInput() {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.value = '';
+        TransactionsPage.currentFilters.search = '';
+        applyFilters();
+    }
+}
+
+/**
+ * Edit transaction
+ */
+function editTransaction(transactionId) {
+    const transaction = TransactionsPage.currentTransactions.find(t => t.id === transactionId);
+    if (!transaction) return;
+    
+    TransactionsPage.editingTransaction = transaction;
+    
+    // Populate edit form
+    document.getElementById('edit-transaction-id').value = transaction.id;
+    document.getElementById('edit-transaction-type').value = transaction.type;
+    document.getElementById('edit-transaction-amount').value = transaction.amount;
+    document.getElementById('edit-transaction-category').value = transaction.category;
+    document.getElementById('edit-transaction-description').value = transaction.description || '';
+    document.getElementById('edit-transaction-date').value = transaction.date;
+    
+    // Update category options based on type
+    updateEditCategoryOptions(transaction.type);
+    
+    // Show modal
+    const modal = document.getElementById('edit-modal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+}
