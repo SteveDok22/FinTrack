@@ -11,23 +11,23 @@
   .main {
     padding: var(--spacing-lg);
   }
-  
+
   .dashboard-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
   }
-  
+
   .balance-card {
     flex-direction: column;
     text-align: center;
     gap: var(--spacing-lg);
   }
-  
+
   .balance-amount {
     font-size: 3rem;
   }
@@ -38,102 +38,102 @@
    =========================================== */
 
 @media (max-width: 767px) {
-  
+
   /* Navigation */
   .nav {
     flex-direction: column;
     gap: var(--spacing-md);
     padding: var(--spacing-md);
   }
-  
+
   .nav-menu {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
     gap: var(--spacing-sm);
   }
-  
+
   .nav-link {
     padding: var(--spacing-sm) var(--spacing-md);
     font-size: 0.875rem;
   }
-  
+
   /* Main content */
   .main {
     padding: var(--spacing-md);
     margin-top: var(--spacing-md);
   }
-  
+
   /* Hero section */
   .balance-card {
     padding: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .balance-amount {
     font-size: 2.5rem;
   }
-  
+
   .trend-indicator {
     font-size: 1rem;
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-  
+
   /* Stats section */
   .stats-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
-  
+
   .stat-card {
     padding: var(--spacing-md);
     flex-direction: row;
     text-align: left;
   }
-  
+
   .stat-icon {
     font-size: 2rem;
     width: 48px;
     height: 48px;
   }
-  
+
   .stat-amount {
     font-size: 1.5rem;
   }
-  
+
   /* Actions section */
   .actions-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-sm);
   }
-  
+
   .action-btn {
     width: 100%;
     padding: var(--spacing-lg);
     font-size: 1rem;
   }
-  
+
   /* Dashboard grid */
   .dashboard-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
   }
-  
+
   /* Categories section */
   .categories-container {
     gap: var(--spacing-sm);
   }
-  
+
   .category-card {
     padding: var(--spacing-md);
   }
-  
+
   .category-icon {
     width: 40px;
     height: 40px;
     font-size: 1.25rem;
   }
-  
+
   /* Recent transactions */
   .transaction-item {
     flex-direction: column;
@@ -141,16 +141,16 @@
     gap: var(--spacing-sm);
     padding: var(--spacing-md);
   }
-  
+
   .transaction-details {
     width: 100%;
   }
-  
+
   .transaction-amount {
     align-self: flex-end;
     font-size: 1.125rem;
   }
-  
+
   .view-all-link {
     text-align: center;
     width: 100%;
@@ -166,106 +166,107 @@
    =========================================== */
 
 @media (max-width: 767px) {
-  
+
   /* Page header */
   .page-header {
     flex-direction: column;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .page-title {
     font-size: 1.75rem;
     margin-bottom: var(--spacing-xs);
   }
-  
+
   .page-actions {
     width: 100%;
   }
-  
+
   .page-actions .btn {
     width: 100%;
   }
-  
+
   /* Filters section */
   .filters-container {
     flex-direction: column;
     gap: var(--spacing-md);
   }
-  
+
   .search-box {
     width: 100%;
   }
-  
+
   .filter-controls {
     flex-direction: column;
     gap: var(--spacing-sm);
     width: 100%;
   }
-  
+
   .filter-controls select,
   .filter-controls button {
     width: 100%;
   }
-  
+
   /* Summary cards */
   .summary-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
   }
-  
+
   .summary-card {
     padding: var(--spacing-md);
     text-align: center;
   }
-  
+
   .summary-icon {
     font-size: 1.5rem;
     margin-bottom: var(--spacing-sm);
   }
-  
+
   .summary-value {
     font-size: 1.25rem;
   }
-  
+
   /* Transactions table */
   .table-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   .transactions-table {
     min-width: 600px;
     font-size: 0.875rem;
   }
-  
+
   .transactions-table th,
   .transactions-table td {
     padding: var(--spacing-sm);
   }
-  
+
   /* Hide some columns on very small screens */
   @media (max-width: 480px) {
+
     .transactions-table .category-cell,
     .transactions-table .type-cell {
       display: none;
     }
   }
-  
+
   /* Mobile-friendly transaction cards alternative */
   .transaction-cards {
     display: none;
   }
-  
+
   @media (max-width: 640px) {
     .table-container .transactions-table {
       display: none;
     }
-    
+
     .transaction-cards {
       display: block;
     }
-    
+
     .transaction-card {
       background-color: var(--color-white);
       border: 1px solid var(--color-gray-200);
@@ -273,19 +274,19 @@
       padding: var(--spacing-md);
       margin-bottom: var(--spacing-md);
     }
-    
+
     .transaction-card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--spacing-sm);
     }
-    
+
     .transaction-card-amount {
       font-size: 1.125rem;
       font-weight: var(--font-weight-bold);
     }
-    
+
     .transaction-card-details {
       display: flex;
       flex-direction: column;
@@ -294,4 +295,116 @@
       font-size: 0.875rem;
     }
   }
-} 
+}
+
+
+/* ===========================================
+   Form and Modal Mobile Styles
+   =========================================== */
+
+@media (max-width: 767px) {
+  .modal-content {
+    width: 95vw;
+    max-width: none;
+    margin: var(--spacing-md);
+  }
+
+  .modal-header {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .transaction-form,
+  .filter-form {
+    padding: var(--spacing-md);
+  }
+
+  .form-group label {
+    font-size: 0.8125rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: var(--spacing-md);
+    font-size: 16px;
+    /* Prevent zoom on iOS */
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ===========================================
+   Component Mobile Styles
+   =========================================== */
+
+@media (max-width: 767px) {
+
+  /* Buttons */
+  .btn.small {
+    padding: var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+
+  /* Category cards */
+  .category-card {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .category-info {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+  }
+
+  .category-details {
+    flex: 1;
+  }
+
+  .category-amount {
+    font-size: 1rem;
+    font-weight: var(--font-weight-bold);
+  }
+
+  /* Budget progress bars */
+  .budget-progress {
+    width: 100%;
+    margin-top: var(--spacing-xs);
+  }
+
+  /* Notifications */
+  .notification {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    left: var(--spacing-md);
+    max-width: none;
+  }
+
+  /* Empty states */
+  .empty-state {
+    padding: var(--spacing-xl);
+  }
+
+  .empty-state p {
+    font-size: 1rem;
+  }
+
+  .empty-chart-state {
+    height: 200px;
+    padding: var(--spacing-lg);
+  }
+
+  /* Loading states */
+  .loading-skeleton {
+    height: 40px;
+    margin-bottom: var(--spacing-md);
+  }
+}
