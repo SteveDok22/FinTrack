@@ -451,3 +451,70 @@ function editTransaction(transactionId) {
         modal.setAttribute('aria-hidden', 'false');
     }
 }
+
+/**
+ * Update edit form category options based on type
+ */
+function updateEditCategoryOptions(transactionType) {
+    const categorySelect = document.getElementById('edit-transaction-category');
+    const currentValue = categorySelect.value;
+    
+    if (!categorySelect) return;
+    
+    const categories = getCategoriesByType(transactionType);
+    categorySelect.innerHTML = '';
+    
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = `${category.icon} ${category.name}`;
+        categorySelect.appendChild(option);
+    });
+    
+    // Restore selection if valid
+    if (categories.find(c => c.id === currentValue)) {
+        categorySelect.value = currentValue;
+    }
+}
+
+/**
+ * Handle edit form submission
+ */
+function handleEditSubmit(event) {
+    event.preventDefault();
+    
+    try {
+        const formData = new FormData(event.target);
+        const transactionId = formData.get('id');
+        const updatedData = {
+            type: formData.get('type'),
+            amount: parseFloat(formData.get('amount')),
+            category: formData.get('category'),
+            description: formData.get('description') || '',
+            date: formData.get('date')
+        };
+        
+        // Validate data
+        if (validateTransaction(updatedData)) {
+            // Update transaction
+            const updatedTransaction = updateTransaction(transactionId, updatedData);
+            
+            if (updatedTransaction) {
+                // Close modal
+                closeModal();
+                
+                // Reload and refresh display
+                loadTransactions();
+                applyFilters();
+                
+                showNotification('Transaction updated successfully!', 'success');
+            } else {
+                showNotification('Transaction not found', 'error');
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error updating transaction:', error);
+        showNotification('Failed to update transaction', 'error');
+    }
+}
