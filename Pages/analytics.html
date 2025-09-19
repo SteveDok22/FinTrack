@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Financial analytics and insights - visualize your spending patterns, income trends, and budget performance">
+    <title>Analytics - Personal Finance Dashboard</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="../Assets/css/styles.css">
+    <link rel="stylesheet" href="../Assets/css/components.css">
+    <link rel="stylesheet" href="../Assets/css/responsive.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header" role="banner">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1 class="nav-title">FinanceTracker</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="transactions.html" class="nav-link">Transactions</a></li>
+                <li><a href="analytics.html" class="nav-link active" aria-current="page">Analytics</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main" role="main">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="page-title-section">
+                <h1 class="page-title">Financial Analytics</h1>
+                <p class="page-description">Detailed insights into your financial patterns and trends</p>
+            </div>
+            <div class="page-actions">
+                <select id="analytics-period" aria-label="Select time period for analytics">
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year" selected>This Year</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Key Metrics Overview -->
+        <section class="metrics-overview" aria-labelledby="metrics-heading">
+            <h2 id="metrics-heading" class="section-title">Key Financial Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card savings-rate">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-content">
+                        <p class="metric-label">Savings Rate</p>
+                        <p class="metric-value" id="analytics-savings-rate">0%</p>
+                        <p class="metric-change" id="savings-rate-change">No change</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card avg-income">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-content">
+                        <p class="metric-label">Avg Monthly Income</p>
+                        <p class="metric-value" id="avg-monthly-income">$0.00</p>
+                        <p class="metric-change" id="income-change">No data</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card avg-expense">
+                    <div class="metric-icon">💸</div>
+                    <div class="metric-content">
+                        <p class="metric-label">Avg Monthly Expenses</p>
+                        <p class="metric-value" id="avg-monthly-expenses">$0.00</p>
+                        <p class="metric-change" id="expense-change">No data</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card biggest-category">
+                    <div class="metric-icon">🏆</div>
+                    <div class="metric-content">
+                        <p class="metric-label">Top Expense Category</p>
+                        <p class="metric-value" id="top-category">N/A</p>
+                        <p class="metric-change" id="top-category-amount">$0.00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Grid -->
+        <div class="analytics-grid">
+            <!-- Income vs Expenses Trend -->
+            <section class="chart-section" aria-labelledby="income-expense-heading">
+                <div class="chart-header">
+                    <h2 id="income-expense-heading">Income vs Expenses Trend</h2>
+                    <p class="chart-description">Monthly comparison of income and spending</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="income-expenses-chart" aria-label="Income vs expenses line chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Spending by Category -->
+            <section class="chart-section" aria-labelledby="category-breakdown-heading">
+                <div class="chart-header">
+                    <h2 id="category-breakdown-heading">Spending Breakdown</h2>
+                    <p class="chart-description">Expenses distributed by category</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="category-pie-chart" aria-label="Spending by category pie chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Spending Trends -->
+            <section class="chart-section" aria-labelledby="spending-trends-heading">
+                <div class="chart-header">
+                    <h2 id="spending-trends-heading">Monthly Spending Trends</h2>
+                    <p class="chart-description">Track spending patterns over time</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="spending-trends-chart" aria-label="Monthly spending trends bar chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Budget Performance -->
+            <section class="chart-section" aria-labelledby="budget-performance-heading">
+                <div class="chart-header">
+                    <h2 id="budget-performance-heading">Budget Performance</h2>
+                    <p class="chart-description">Actual spending vs budgeted amounts</p>
+                </div>
+                <div class="budget-performance-container" id="budget-performance-container">
+                    <!-- Budget performance bars generated dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Financial Insights -->
+        <section class="insights-section" aria-labelledby="insights-heading">
+            <h2 id="insights-heading" class="section-title">Financial Insights</h2>
+            <div class="insights-grid" id="insights-container">
+                <!-- Insights generated dynamically -->
+            </div>
+        </section>
+
+        <!-- Export Section -->
+        <section class="export-section" aria-labelledby="export-heading">
+            <h2 id="export-heading" class="section-title">Export & Reports</h2>
+            <div class="export-actions">
+                <button class="btn secondary" id="export-analytics-btn">
+                    <span class="btn-icon">📊</span>
+                    <span class="btn-text">Export Analytics Report</span>
+                </button>
+                <button class="btn secondary" id="export-charts-btn">
+                    <span class="btn-icon">📈</span>
+                    <span class="btn-text">Save Charts as Images</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification -->
+    <div class="notification" id="notification" role="alert" aria-live="polite">
+        <span class="notification-message" id="notification-message"></span>
+        <button class="notification-close" id="notification-close" aria-label="Close notification">✕</button>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="../Assets/js/utils.js"></script>
+    <script src="../Assets/js/storage.js"></script>
+    <script src="../Assets/js/charts.js"></script>
+    <script src="../Assets/js/analytics.js"></script>
+    <script src="../Assets/js/script.js"></script>
+</body>
+</html>
