@@ -518,3 +518,89 @@ function handleEditSubmit(event) {
         showNotification('Failed to update transaction', 'error');
     }
 }
+
+/**
+ * Handle delete transaction
+ */
+function handleDeleteTransaction() {
+    if (!TransactionsPage.editingTransaction) return;
+    
+    const confirmed = confirm('Are you sure you want to delete this transaction? This action cannot be undone.');
+    
+    if (confirmed) {
+        try {
+            const success = deleteTransaction(TransactionsPage.editingTransaction.id);
+            
+            if (success) {
+                closeModal();
+                loadTransactions();
+                applyFilters();
+                showNotification('Transaction deleted successfully!', 'success');
+            } else {
+                showNotification('Failed to delete transaction', 'error');
+            }
+        } catch (error) {
+            console.error('Error deleting transaction:', error);
+            showNotification('Failed to delete transaction', 'error');
+        }
+    }
+}
+
+/**
+ * Export transactions to CSV
+ */
+function exportTransactions() {
+    try {
+        const transactions = TransactionsPage.filteredTransactions;
+        
+        if (transactions.length === 0) {
+            showNotification('No transactions to export', 'warning');
+            return;
+        }
+        
+        // Create CSV header
+        const headers = ['Date', 'Description', 'Category', 'Type', 'Amount'];
+        const csvRows = [headers.join(',')];
+        
+        // Add transaction rows
+        transactions.forEach(transaction => {
+            const category = getCategoryById(transaction.category);
+            const categoryName = category ? category.name : 'Unknown';
+            
+            const row = [
+                transaction.date,
+                `"${transaction.description || categoryName}"`,
+                `"${categoryName}"`,
+                transaction.type,
+                transaction.amount
+            ];
+            csvRows.push(row.join(','));
+        });
+        
+        // Create and download file
+        const csvContent = csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `transactions_${getTodayString()}.csv`;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+        
+        showNotification(`Exported ${transactions.length} transactions`, 'success');
+        
+    } catch (error) {
+        console.error('Error exporting transactions:', error);
+        showNotification('Failed to export transactions', 'error');
+    }
+}
+
+// Initialize transactions page when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on the transactions page
+    if (document.getElementById('transactions-table')) {
+        initializeTransactionsPage();
+    }
+});
