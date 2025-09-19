@@ -240,3 +240,81 @@ function createIncomeExpensesLineChart(canvasId, period = 'year') {
         return createEmptyChart(canvas, 'Failed to load chart data');
     }
 }
+
+/**
+ * Create spending trends bar chart
+ * @param {string} canvasId - Canvas element ID
+ * @returns {Chart} Chart.js instance
+ */
+function createSpendingTrendsChart(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return null;
+
+    try {
+        // Get last 6 months spending data
+        const trendData = getSpendingTrendsData();
+        
+        if (trendData.length === 0) {
+            return createEmptyChart(canvas, 'No spending data available');
+        }
+
+        const ctx = canvas.getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: trendData.map(d => d.month),
+                datasets: [{
+                    label: 'Total Spending',
+                    data: trendData.map(d => d.spending),
+                    backgroundColor: CHART_COLORS.primary + '80',
+                    borderColor: CHART_COLORS.primary,
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                ...DEFAULT_CHART_OPTIONS,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            },
+                            color: CHART_COLORS.gray
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: CHART_COLORS.gray
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    ...DEFAULT_CHART_OPTIONS.plugins,
+                    tooltip: {
+                        ...DEFAULT_CHART_OPTIONS.plugins.tooltip,
+                        callbacks: {
+                            label: function(context) {
+                                return `Spending: ${formatCurrency(context.parsed.y)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return chart;
+
+    } catch (error) {
+        console.error('Error creating spending trends chart:', error);
+        return createEmptyChart(canvas, 'Failed to load chart data');
+    }
+}
