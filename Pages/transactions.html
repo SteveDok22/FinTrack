@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage all your financial transactions - view, add, edit, and analyze your income and expenses">
+    <title>Transactions - Personal Finance Dashboard</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="../Assets/css/styles.css">
+    <link rel="stylesheet" href="../Assets/css/components.css">
+    <link rel="stylesheet" href="../Assets/css/responsive.css">
+</head>
+<body>
+     <!-- Header Section -->
+    <header class="header" role="banner">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1 class="nav-title">FinanceTracker</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="transactions.html" class="nav-link active" aria-current="page">Transactions</a></li>
+                <li><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main" role="main">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="page-title-section">
+                <h1 class="page-title">Transaction Management</h1>
+                <p class="page-description">View, add, and manage all your financial transactions</p>
+            </div>
+            <div class="page-actions">
+                <button class="btn primary" id="add-transaction-btn" aria-label="Add new transaction">
+                    <span class="btn-icon">➕</span>
+                    <span class="btn-text">Add Transaction</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Filters and Search Section -->
+        <section class="filters-section" aria-labelledby="filters-heading">
+            <h2 id="filters-heading" class="visually-hidden">Transaction Filters</h2>
+            <div class="filters-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search transactions..." 
+                           aria-label="Search transactions">
+                    <button class="search-clear" id="clear-search" aria-label="Clear search">✕</button>
+                </div>
+                
+                <div class="filter-controls">
+                    <select id="type-filter" aria-label="Filter by transaction type">
+                        <option value="all">All Types</option>
+                        <option value="income">Income Only</option>
+                        <option value="expense">Expenses Only</option>
+                    </select>
+                    
+                    <select id="category-filter" aria-label="Filter by category">
+                        <option value="all">All Categories</option>
+                        <!-- Categories populated dynamically -->
+                    </select>
+                    
+                    <select id="period-filter" aria-label="Filter by time period">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    
+                    <button class="btn secondary" id="reset-filters">Reset Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Cards -->
+        <section class="transaction-summary" aria-labelledby="summary-heading">
+            <h2 id="summary-heading" class="visually-hidden">Transaction Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon">📊</div>
+                    <div class="summary-content">
+                        <p class="summary-label">Total Transactions</p>
+                        <p class="summary-value" id="total-count">0</p>
+                    </div>
+                </div>
+                <div class="summary-card income">
+                    <div class="summary-icon">💰</div>
+                    <div class="summary-content">
+                        <p class="summary-label">Total Income</p>
+                        <p class="summary-value" id="filtered-income">$0.00</p>
+                    </div>
+                </div>
+                <div class="summary-card expense">
+                    <div class="summary-icon">💸</div>
+                    <div class="summary-content">
+                        <p class="summary-label">Total Expenses</p>
+                        <p class="summary-value" id="filtered-expenses">$0.00</p>
+                    </div>
+                </div>
+                <div class="summary-card balance">
+                    <div class="summary-icon">⚖️</div>
+                    <div class="summary-content">
+                        <p class="summary-label">Net Balance</p>
+                        <p class="summary-value" id="filtered-balance">$0.00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Table -->
+        <section class="transactions-table-section" aria-labelledby="table-heading">
+            <h2 id="table-heading" class="section-title">All Transactions</h2>
+            
+            <!-- Table Controls -->
+            <div class="table-controls">
+                <div class="table-info">
+                    <span id="showing-results">Showing all transactions</span>
+                </div>
+                <div class="table-actions">
+                    <select id="sort-select" aria-label="Sort transactions">
+                        <option value="date-desc">Date (Newest First)</option>
+                        <option value="date-asc">Date (Oldest First)</option>
+                        <option value="amount-desc">Amount (Highest First)</option>
+                        <option value="amount-asc">Amount (Lowest First)</option>
+                        <option value="category">Category (A-Z)</option>
+                    </select>
+                    <button class="btn secondary small" id="export-btn">Export CSV</button>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="table-container">
+                <table class="transactions-table" id="transactions-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="date">
+                                Date
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-sort="description">
+                                Description
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-sort="category">
+                                Category
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-sort="type">
+                                Type
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-sort="amount">
+                                Amount
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-tbody">
+                        <!-- Transactions populated dynamically -->
+                    </tbody>
+                </table>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <div class="empty-icon">📝</div>
+                    <h3>No transactions found</h3>
+                    <p>Try adjusting your filters or add your first transaction</p>
+                    <button class="btn primary" onclick="openAddTransactionModal()">Add Transaction</button>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination-container" style="display: none;">
+                <button class="pagination-btn" id="prev-page" disabled>← Previous</button>
+                <div class="pagination-info">
+                    <span id="page-info">Page 1 of 1</span>
+                </div>
+                <button class="pagination-btn" id="next-page" disabled>Next →</button>
+            </div>
+        </section>
+    </main>
+
+  <!-- JavaScript Files -->
+    <script src="../Assets/js/utils.js"></script>
+    <script src="../Assets/js/storage.js"></script>
+    <script src="../Assets/js/charts.js"></script>
+    <script src="../Assets/js/transactions.js"></script>
+    <script src="../Assets/js/script.js"></script>
+</body>
+</html>
