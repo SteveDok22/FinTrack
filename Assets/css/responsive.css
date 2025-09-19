@@ -408,3 +408,110 @@
     margin-bottom: var(--spacing-md);
   }
 }
+
+/* ===========================================
+   Large Mobile (480px - 640px)
+   =========================================== */
+
+@media (max-width: 640px) and (min-width: 481px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .transactions-table {
+    min-width: 500px;
+  }
+}
+
+/* ===========================================
+   Small Mobile (480px and below)
+   =========================================== */
+
+@media (max-width: 480px) {
+  .nav-title {
+    font-size: 1.5rem;
+  }
+  
+  .balance-amount {
+    font-size: 2rem;
+  }
+  
+  .stat-amount {
+    font-size: 1.25rem;
+  }
+  
+  .stats-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-card {
+    padding: var(--spacing-sm);
+  }
+  
+  .transaction-item {
+    padding: var(--spacing-sm);
+  }
+  
+  .chart-container {
+    height: 200px;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* ===========================================
+   Touch and Gesture Optimizations
+   =========================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-friendly sizing */
+  .btn {
+    min-height: 44px;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  
+  .nav-link {
+    min-height: 44px;
+    padding: var(--spacing-md);
+  }
+  
+  .modal-close {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+  
+  .notification-close {
+    width: 32px;
+    height: 32px;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .category-card:hover,
+  .transaction-item:hover,
+  .stat-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+  
+  /* Improve tap targets */
+  .sortable {
+    min-height: 44px;
+    padding: var(--spacing-md);
+  }
+  
+  .pagination-btn {
+    min-height: 44px;
+  }
+}
