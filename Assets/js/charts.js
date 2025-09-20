@@ -433,3 +433,52 @@ function updateAllCharts() {
         createSpendingTrendsChart('spending-trends-chart');
     }
 }
+
+/**
+ * Resize charts on window resize
+ */
+function resizeCharts() {
+    Object.values(window.charts).forEach(chart => {
+        if (chart && typeof chart.resize === 'function') {
+            chart.resize();
+        }
+    });
+}
+
+/**
+ * Destroy all charts
+ */
+function destroyAllCharts() {
+    Object.keys(window.charts).forEach(key => {
+        if (window.charts[key] && typeof window.charts[key].destroy === 'function') {
+            window.charts[key].destroy();
+            window.charts[key] = null;
+        }
+    });
+}
+
+// Set up chart responsiveness
+window.addEventListener('resize', debounce(resizeCharts, 250));
+
+// Initialize charts when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dashboard chart if on dashboard page
+    if (document.getElementById('expense-chart')) {
+        setTimeout(() => {
+            createExpensePieChart('expense-chart');
+        }, 500);
+    }
+    
+    // Initialize analytics charts if on analytics page
+    if (document.getElementById('income-expenses-chart')) {
+        setTimeout(() => {
+            createIncomeExpensesLineChart('income-expenses-chart');
+        }, 500);
+    }
+    
+    if (document.getElementById('spending-trends-chart')) {
+        setTimeout(() => {
+            createSpendingTrendsChart('spending-trends-chart');
+        }, 750);
+    }
+});
