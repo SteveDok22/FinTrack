@@ -57,3 +57,27 @@ function setupAnalyticsEventListeners() {
         exportChartsBtn.addEventListener('click', exportChartsAsImages);
     }
 }
+
+/**
+ * Handle period change
+ */
+function handlePeriodChange(event) {
+    AnalyticsPage.currentPeriod = event.target.value;
+    loadAnalyticsData();
+    updateAnalyticsCharts();
+}
+
+/**
+ * Load analytics data for current period
+ */
+function loadAnalyticsData() {
+    try {
+        updateKeyMetrics();
+        generateFinancialInsights();
+        updateBudgetPerformance();
+        
+    } catch (error) {
+        console.error('Error loading analytics data:', error);
+        showNotification('Error loading analytics data', 'error');
+    }
+}
