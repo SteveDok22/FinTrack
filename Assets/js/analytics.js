@@ -81,3 +81,40 @@ function loadAnalyticsData() {
         showNotification('Error loading analytics data', 'error');
     }
 }
+
+/**
+ * Get number of months in period
+ */
+function getMonthsInPeriod(period) {
+    switch (period) {
+        case 'month': return 1;
+        case 'quarter': return 3;
+        case 'year': return 12;
+        default: return 1;
+    }
+}
+
+/**
+ * Find top spending category
+ */
+function findTopSpendingCategory(expensesByCategory) {
+    const categories = getCategoriesByType('expense');
+    let topCategory = null;
+    let maxAmount = 0;
+    
+    Object.entries(expensesByCategory).forEach(([categoryId, amount]) => {
+        if (amount > maxAmount) {
+            maxAmount = amount;
+            const category = categories.find(c => c.id === categoryId);
+            if (category) {
+                topCategory = {
+                    id: categoryId,
+                    name: category.name,
+                    amount: amount
+                };
+            }
+        }
+    });
+    
+    return topCategory;
+}
