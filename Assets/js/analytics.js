@@ -180,3 +180,47 @@ function findTopSpendingCategory(expensesByCategory) {
     
     return topCategory;
 }
+
+/**
+ * Initialize all analytics charts
+ */
+function initializeAnalyticsCharts() {
+    setTimeout(() => {
+        createIncomeExpensesLineChart('income-expenses-chart', AnalyticsPage.currentPeriod);
+        createExpensePieChart('category-pie-chart', AnalyticsPage.currentPeriod);
+        createSpendingTrendsChart('spending-trends-chart');
+    }, 500);
+}
+
+/**
+ * Update all analytics charts
+ */
+function updateAnalyticsCharts() {
+    // Destroy existing charts
+    Object.keys(AnalyticsPage.charts).forEach(key => {
+        if (AnalyticsPage.charts[key]) {
+            AnalyticsPage.charts[key].destroy();
+            AnalyticsPage.charts[key] = null;
+        }
+    });
+    
+    // Recreate charts with new data
+    initializeAnalyticsCharts();
+}
+
+/**
+ * Generate financial insights
+ */
+function generateFinancialInsights() {
+    const container = document.getElementById('insights-container');
+    if (!container) return;
+    
+    const insights = calculateFinancialInsights();
+    container.innerHTML = '';
+    
+    insights.forEach(insight => {
+        const insightCard = createInsightCard(insight);
+        container.appendChild(insightCard);
+    });
+}
+
