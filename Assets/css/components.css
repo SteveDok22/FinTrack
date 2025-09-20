@@ -522,6 +522,103 @@
 }
 
 /* ===========================================
+   Analytics Page Components
+   =========================================== */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--color-light-green);
+}
+
+.page-title-section h1 {
+  color: var(--color-gray-900);
+  font-size: 2.25rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.page-description {
+  color: var(--color-gray-600);
+  font-size: 1.125rem;
+}
+
+.section-title {
+  color: var(--color-gray-900);
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-light-green);
+}
+
+
+/* Metrics Overview */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.metric-card {
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-light-green) 100%);
+  border: 2px solid var(--color-neon-green);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  transition: all var(--transition-normal);
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.metric-icon {
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-neon-green), var(--color-dark-green));
+  border-radius: var(--radius-lg);
+  color: var(--color-white);
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-label {
+  color: var(--color-gray-600);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  color: var(--color-gray-900);
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  margin-bottom: var(--spacing-xs);
+}
+
+.metric-change {
+  color: var(--color-gray-600);
+  font-size: 0.75rem;
+}
+
+/* ===========================================
    Animations
    =========================================== */
 
