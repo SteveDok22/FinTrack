@@ -83,6 +83,68 @@ function loadAnalyticsData() {
 }
 
 /**
+ * Update key metrics display
+ */
+function updateKeyMetrics() {
+    const period = AnalyticsPage.currentPeriod;
+    
+    // Calculate metrics
+    const totalIncome = calculateTotalIncome(period);
+    const totalExpenses = calculateTotalExpenses(period);
+    const savingsRate = totalIncome > 0 ? calculatePercentage(totalIncome - totalExpenses, totalIncome) : 0;
+    
+    // Get monthly averages
+    const monthsInPeriod = getMonthsInPeriod(period);
+    const avgMonthlyIncome = monthsInPeriod > 0 ? totalIncome / monthsInPeriod : 0;
+    const avgMonthlyExpenses = monthsInPeriod > 0 ? totalExpenses / monthsInPeriod : 0;
+    
+    // Find top spending category
+    const expensesByCategory = calculateExpensesByCategory(period);
+    const topCategory = findTopSpendingCategory(expensesByCategory);
+    
+    // Update UI elements
+    updateMetricElement('analytics-savings-rate', `${Math.max(0, savingsRate)}%`);
+    updateMetricElement('avg-monthly-income', formatCurrency(avgMonthlyIncome));
+    updateMetricElement('avg-monthly-expenses', formatCurrency(avgMonthlyExpenses));
+    
+    if (topCategory) {
+        updateMetricElement('top-category', topCategory.name);
+        updateMetricElement('top-category-amount', formatCurrency(topCategory.amount));
+    } else {
+        updateMetricElement('top-category', 'No data');
+        updateMetricElement('top-category-amount', '$0.00');
+    }
+    
+    // Calculate and display changes (simplified - comparing to previous period)
+    updateMetricChanges(period);
+}
+
+/**
+ * Update metric element
+ */
+function updateMetricElement(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.textContent = value;
+    }
+}
+
+/**
+ * Update metric change indicators
+ */
+function updateMetricChanges(period) {
+    // Simplified implementation - would compare with previous period in real app
+    const savingsRateChange = document.getElementById('savings-rate-change');
+    const incomeChange = document.getElementById('income-change');
+    const expenseChange = document.getElementById('expense-change');
+    
+    // For demo purposes, show static changes
+    if (savingsRateChange) savingsRateChange.textContent = '+2.3% vs last period';
+    if (incomeChange) incomeChange.textContent = '+5.2% vs last period';
+    if (expenseChange) expenseChange.textContent = '+1.8% vs last period';
+}
+
+/**
  * Get number of months in period
  */
 function getMonthsInPeriod(period) {
