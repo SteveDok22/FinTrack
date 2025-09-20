@@ -515,3 +515,121 @@
     min-height: 44px;
   }
 }
+
+/* ===========================================
+   Dark Mode Support (System Preference)
+   =========================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-50: #111827;
+    --color-gray-100: #1f2937;
+    --color-gray-200: #374151;
+    --color-white: #1f2937;
+    --color-gray-900: #f9fafb;
+  }
+  
+  .header {
+    background: linear-gradient(135deg, var(--color-black) 0%, var(--color-dark-green) 100%);
+  }
+  
+  .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* ===========================================
+   Reduced Motion Support
+   =========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .modal.active .modal-content {
+    animation: none;
+  }
+  
+  .notification {
+    animation: none;
+  }
+  
+  .loading-skeleton {
+    animation: none;
+    background: var(--color-gray-200);
+  }
+}
+
+/* ===========================================
+   High Contrast Mode
+   =========================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-neon-green: #00ff00;
+    --color-dark-green: #004d00;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .btn.primary {
+    background: var(--color-neon-green);
+    color: var(--color-black);
+    border: 2px solid var(--color-black);
+  }
+  
+  .category-card,
+  .transaction-item,
+  .stat-card {
+    border: 2px solid var(--color-gray-400);
+  }
+}
+
+/* ===========================================
+   Print Styles
+   =========================================== */
+
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  .header,
+  .modal,
+  .notification,
+  .btn,
+  .actions-section {
+    display: none !important;
+  }
+  
+  .main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .balance-card {
+    border: 2px solid black;
+    page-break-inside: avoid;
+  }
+  
+  .transactions-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .transactions-table th,
+  .transactions-table td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+  
+  .page-break {
+    page-break-before: always;
+  }
+}
