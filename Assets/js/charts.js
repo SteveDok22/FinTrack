@@ -318,3 +318,118 @@ function createSpendingTrendsChart(canvasId) {
         return createEmptyChart(canvas, 'Failed to load chart data');
     }
 }
+
+/**
+ * Create empty chart placeholder
+ * @param {HTMLCanvasElement} canvas - Canvas element
+ * @param {string} message - Message to display
+ */
+function createEmptyChart(canvas, message) {
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.style.display = 'none';
+    
+     const container = canvas.parentElement;
+    container.innerHTML = `
+        <div class="empty-chart-state">
+            <div class="empty-chart-icon">📊</div>
+            <p>${message}</p>
+            <button class="btn primary" onclick="openAddTransactionModal()">Add Transaction</button>
+        </div>
+    `;
+}
+
+/**
+ * Get monthly income and expense data
+ * @returns {Array} Monthly data array
+ */
+
+function getMonthlyIncomeExpenseData() {
+    const transactions = getTransactions();
+    const currentYear = new Date().getFullYear();
+    const monthlyData = [];
+    
+    // Initialize 12 months
+    for (let month = 0; month < 12; month++) {
+        const monthName = new Date(currentYear, month, 1)
+            .toLocaleDateString('en-US', { month: 'short' });
+
+            monthlyData.push({
+            month: monthName,
+            income: 0,
+            expenses: 0
+        });
+    }
+
+     // Aggregate transactions by month
+    transactions.forEach(transaction => {
+        const date = new Date(transaction.date);
+        if (date.getFullYear() === currentYear) {
+            const monthIndex = date.getMonth();
+            if (transaction.type === 'income') {
+                monthlyData[monthIndex].income += transaction.amount;
+            } else {
+                monthlyData[monthIndex].expenses += transaction.amount;
+            }
+        }
+    });
+    
+    return monthlyData;
+}
+
+/**
+ * Get spending trends data for last 6 months
+ * @returns {Array} Spending trends data
+ */
+function getSpendingTrendsData() {
+    const transactions = getTransactions();
+    const now = new Date();
+    const trendsData = [];
+
+    // Get last 6 months
+    for (let i = 5; i >= 0; i--) {
+        const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthName = date.toLocaleDateString('en-US', { month: 'short' });
+        const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        
+        const monthTransactions = transactions.filter(t => {
+            const transactionDate = new Date(t.date);
+            return transactionDate >= startDate && 
+                   transactionDate <= endDate && 
+                   t.type === 'expense';
+        });
+
+          const totalSpending = monthTransactions.reduce((sum, t) => sum + t.amount, 0);
+        
+        trendsData.push({
+            month: monthName,
+            spending: totalSpending
+        });
+    }
+    
+    return trendsData;
+}
+
+/**
+ * Update all charts on data change
+ */
+function updateAllCharts() {
+    // Update dashboard chart
+    const dashboardCanvas = document.getElementById('expense-chart');
+    if (dashboardCanvas) {
+        createExpensePieChart('expense-chart');
+    }
+    
+    // Update analytics charts
+    const analyticsCanvas = document.getElementById('income-expenses-chart');
+    if (analyticsCanvas) {
+        createIncomeExpensesLineChart('income-expenses-chart');
+    }
+    
+    const trendsCanvas = document.getElementById('spending-trends-chart');
+    if (trendsCanvas) {
+        createSpendingTrendsChart('spending-trends-chart');
+    }
+}
