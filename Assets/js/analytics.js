@@ -366,16 +366,16 @@ function createInsightCard(insight) {
 function updateBudgetPerformance() {
     const container = document.getElementById('budget-performance-container');
     if (!container) return;
-    
+
     const expensesByCategory = calculateExpensesByCategory('month');
     const settings = getSettings();
     const categories = getCategoriesByType('expense');
-    
+
     container.innerHTML = '';
-    
+
     // Filter categories with budgets
     const budgetCategories = categories.filter(cat => settings.budgets[cat.id] > 0);
-    
+
     if (budgetCategories.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
@@ -385,16 +385,16 @@ function updateBudgetPerformance() {
         `;
         return;
     }
-    
+
     budgetCategories.forEach(category => {
         const budget = settings.budgets[category.id];
         const spent = expensesByCategory[category.id] || 0;
         const percentage = Math.min((spent / budget) * 100, 100);
         const isOverBudget = spent > budget;
-        
+
         const budgetBar = document.createElement('div');
         budgetBar.className = 'budget-bar';
-        
+
         budgetBar.innerHTML = `
             <div class="budget-header">
                 <div class="budget-category">
@@ -416,7 +416,93 @@ function updateBudgetPerformance() {
             </div>
             ${isOverBudget ? `<div class="over-budget-warning">Over budget by ${formatCurrency(spent - budget)}</div>` : ''}
         `;
-        
+
         container.appendChild(budgetBar);
     });
 }
+
+/**
+ * Export analytics report
+ */
+function exportAnalyticsReport() {
+    try {
+        const period = AnalyticsPage.currentPeriod;
+        const reportData = generateAnalyticsReport(period);
+
+        // Create CSV content
+        const csvContent = [
+            'Personal Finance Analytics Report',
+            `Period: ${capitalize(period)}`,
+            `Generated: ${new Date().toLocaleDateString()}`,
+            '',
+            'Key Metrics:',
+            `Savings Rate,${reportData.savingsRate}%`,
+            `Total Income,${formatCurrency(reportData.totalIncome)}`,
+            `Total Expenses,${formatCurrency(reportData.totalExpenses)}`,
+            `Net Balance,${formatCurrency(reportData.balance)}`,
+            '',
+            'Expenses by Category:',
+            'Category,Amount,Percentage'
+        ];
+
+        // Add category data
+        Object.entries(reportData.expensesByCategory).forEach(([categoryId, amount]) => {
+            const category = getCategoryById(categoryId);
+            const categoryName = category ? category.name : 'Unknown';
+            const percentage = reportData.totalExpenses > 0 ?
+                ((amount / reportData.totalExpenses) * 100).toFixed(1) : '0';
+            csvContent.push(`${categoryName},${amount},${percentage}%`);
+        });
+
+        // Download CSV
+        const blob = new Blob([csvContent.join('\n')], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `analytics_report_${getTodayString()}.csv`;
+        link.click();
+
+        URL.revokeObjectURL(url);
+        showNotification('Analytics report exported successfully!', 'success');
+
+    } catch (error) {
+        console.error('Error exporting analytics report:', error);
+        showNotification('Failed to export report', 'error');
+    }
+}
+
+/**
+ * Generate analytics report data
+ */
+function generateAnalyticsReport(period) {
+    const totalIncome = calculateTotalIncome(period);
+    const totalExpenses = calculateTotalExpenses(period);
+    const balance = totalIncome - totalExpenses;
+    const savingsRate = totalIncome > 0 ? ((balance / totalIncome) * 100) : 0;
+    const expensesByCategory = calculateExpensesByCategory(period);
+
+    return {
+        period,
+        totalIncome,
+        totalExpenses,
+        balance,
+        savingsRate: Math.max(0, savingsRate).toFixed(1),
+        expensesByCategory
+    };
+}
+
+/**
+ * Export charts as images (simplified implementation)
+ */
+function exportChartsAsImages() {
+    showNotification('Chart export feature coming soon!', 'info');
+    // In a real implementation, this would capture chart canvases as images
+}
+
+// Initialize analytics page when DOM loads
+document.addEventListener('DOMContentLoaded', function () {
+    // Check if we're on the analytics page
+    if (document.getElementById('analytics-period')) {
+        initializeAnalyticsPage();
+    }
+});
