@@ -20,15 +20,15 @@ function initializeAnalyticsPage() {
     try {
         // Set up event listeners
         setupAnalyticsEventListeners();
-        
+
         // Load initial analytics
         loadAnalyticsData();
-        
+
         // Initialize charts
         initializeAnalyticsCharts();
-        
+
         console.log('Analytics page initialized successfully');
-        
+
     } catch (error) {
         console.error('Failed to initialize analytics page:', error);
         showNotification('Failed to load analytics data', 'error');
@@ -44,15 +44,15 @@ function setupAnalyticsEventListeners() {
     if (periodSelect) {
         periodSelect.addEventListener('change', handlePeriodChange);
     }
-    
+
     // Export buttons
     const exportAnalyticsBtn = document.getElementById('export-analytics-btn');
     const exportChartsBtn = document.getElementById('export-charts-btn');
-    
+
     if (exportAnalyticsBtn) {
         exportAnalyticsBtn.addEventListener('click', exportAnalyticsReport);
     }
-    
+
     if (exportChartsBtn) {
         exportChartsBtn.addEventListener('click', exportChartsAsImages);
     }
@@ -75,7 +75,7 @@ function loadAnalyticsData() {
         updateKeyMetrics();
         generateFinancialInsights();
         updateBudgetPerformance();
-        
+
     } catch (error) {
         console.error('Error loading analytics data:', error);
         showNotification('Error loading analytics data', 'error');
@@ -87,26 +87,26 @@ function loadAnalyticsData() {
  */
 function updateKeyMetrics() {
     const period = AnalyticsPage.currentPeriod;
-    
+
     // Calculate metrics
     const totalIncome = calculateTotalIncome(period);
     const totalExpenses = calculateTotalExpenses(period);
     const savingsRate = totalIncome > 0 ? calculatePercentage(totalIncome - totalExpenses, totalIncome) : 0;
-    
+
     // Get monthly averages
     const monthsInPeriod = getMonthsInPeriod(period);
     const avgMonthlyIncome = monthsInPeriod > 0 ? totalIncome / monthsInPeriod : 0;
     const avgMonthlyExpenses = monthsInPeriod > 0 ? totalExpenses / monthsInPeriod : 0;
-    
+
     // Find top spending category
     const expensesByCategory = calculateExpensesByCategory(period);
     const topCategory = findTopSpendingCategory(expensesByCategory);
-    
+
     // Update UI elements
     updateMetricElement('analytics-savings-rate', `${Math.max(0, savingsRate)}%`);
     updateMetricElement('avg-monthly-income', formatCurrency(avgMonthlyIncome));
     updateMetricElement('avg-monthly-expenses', formatCurrency(avgMonthlyExpenses));
-    
+
     if (topCategory) {
         updateMetricElement('top-category', topCategory.name);
         updateMetricElement('top-category-amount', formatCurrency(topCategory.amount));
@@ -114,7 +114,7 @@ function updateKeyMetrics() {
         updateMetricElement('top-category', 'No data');
         updateMetricElement('top-category-amount', '$0.00');
     }
-    
+
     // Calculate and display changes (simplified - comparing to previous period)
     updateMetricChanges(period);
 }
@@ -137,7 +137,7 @@ function updateMetricChanges(period) {
     const savingsRateChange = document.getElementById('savings-rate-change');
     const incomeChange = document.getElementById('income-change');
     const expenseChange = document.getElementById('expense-change');
-    
+
     // For demo purposes, show static changes
     if (savingsRateChange) savingsRateChange.textContent = '+2.3% vs last period';
     if (incomeChange) incomeChange.textContent = '+5.2% vs last period';
@@ -163,7 +163,7 @@ function findTopSpendingCategory(expensesByCategory) {
     const categories = getCategoriesByType('expense');
     let topCategory = null;
     let maxAmount = 0;
-    
+
     Object.entries(expensesByCategory).forEach(([categoryId, amount]) => {
         if (amount > maxAmount) {
             maxAmount = amount;
@@ -177,7 +177,7 @@ function findTopSpendingCategory(expensesByCategory) {
             }
         }
     });
-    
+
     return topCategory;
 }
 
@@ -203,7 +203,7 @@ function updateAnalyticsCharts() {
             AnalyticsPage.charts[key] = null;
         }
     });
-    
+
     // Recreate charts with new data
     initializeAnalyticsCharts();
 }
@@ -214,10 +214,10 @@ function updateAnalyticsCharts() {
 function generateFinancialInsights() {
     const container = document.getElementById('insights-container');
     if (!container) return;
-    
+
     const insights = calculateFinancialInsights();
     container.innerHTML = '';
-    
+
     insights.forEach(insight => {
         const insightCard = createInsightCard(insight);
         container.appendChild(insightCard);
@@ -230,12 +230,12 @@ function generateFinancialInsights() {
 function calculateFinancialInsights() {
     const insights = [];
     const period = AnalyticsPage.currentPeriod;
-    
+
     // Income vs Expenses insight
     const income = calculateTotalIncome(period);
     const expenses = calculateTotalExpenses(period);
     const balance = income - expenses;
-    
+
     if (balance > 0) {
         insights.push({
             type: 'positive',
@@ -251,7 +251,7 @@ function calculateFinancialInsights() {
             icon: '⚠️'
         });
     }
-    
+
     // Savings Rate insight
     const savingsRate = income > 0 ? (balance / income) * 100 : 0;
     if (savingsRate >= 20) {
@@ -276,11 +276,11 @@ function calculateFinancialInsights() {
             icon: '📊'
         });
     }
-    
+
     // Top spending category insight
     const expensesByCategory = calculateExpensesByCategory(period);
     const topCategory = findTopSpendingCategory(expensesByCategory);
-    
+
     if (topCategory && expenses > 0) {
         const percentage = (topCategory.amount / expenses) * 100;
         if (percentage > 40) {
@@ -292,13 +292,70 @@ function calculateFinancialInsights() {
             });
         }
     }
-    
+
     // Budget performance insight
     const budgetInsight = analyzeBudgetPerformance();
     if (budgetInsight) {
         insights.push(budgetInsight);
     }
-    
+
     return insights;
 }
 
+/**
+ * Analyze budget performance
+ */
+function analyzeBudgetPerformance() {
+    const expensesByCategory = calculateExpensesByCategory('month');
+    const settings = getSettings();
+    const categories = getCategoriesByType('expense');
+
+    let overBudgetCategories = 0;
+    let totalBudgetVariance = 0;
+
+    categories.forEach(category => {
+        const budget = settings.budgets[category.id] || 0;
+        const spent = expensesByCategory[category.id] || 0;
+
+        if (budget > 0 && spent > budget) {
+            overBudgetCategories++;
+            totalBudgetVariance += (spent - budget);
+        }
+    });
+
+    if (overBudgetCategories > 0) {
+        return {
+            type: 'warning',
+            title: 'Budget Overruns',
+            message: `You're over budget in ${overBudgetCategories} categories, exceeding by ${formatCurrency(totalBudgetVariance)} total.`,
+            icon: '📋'
+        };
+    } else if (Object.keys(settings.budgets).length > 0) {
+        return {
+            type: 'positive',
+            title: 'Budget On Track',
+            message: 'You\'re staying within your budgets across all categories. Excellent discipline!',
+            icon: '✅'
+        };
+    }
+
+    return null;
+}
+
+/**
+ * Create insight card element
+ */
+function createInsightCard(insight) {
+    const card = document.createElement('div');
+    card.className = `insight-card ${insight.type}`;
+
+    card.innerHTML = `
+        <div class="insight-icon">${insight.icon}</div>
+        <div class="insight-content">
+            <h3 class="insight-title">${insight.title}</h3>
+            <p class="insight-message">${insight.message}</p>
+        </div>
+    `;
+
+    return card;
+}
