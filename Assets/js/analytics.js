@@ -224,3 +224,81 @@ function generateFinancialInsights() {
     });
 }
 
+/**
+ * Calculate financial insights
+ */
+function calculateFinancialInsights() {
+    const insights = [];
+    const period = AnalyticsPage.currentPeriod;
+    
+    // Income vs Expenses insight
+    const income = calculateTotalIncome(period);
+    const expenses = calculateTotalExpenses(period);
+    const balance = income - expenses;
+    
+    if (balance > 0) {
+        insights.push({
+            type: 'positive',
+            title: 'Positive Cash Flow',
+            message: `You saved ${formatCurrency(balance)} this ${period}. Great job maintaining a positive balance!`,
+            icon: '💚'
+        });
+    } else if (balance < 0) {
+        insights.push({
+            type: 'warning',
+            title: 'Negative Cash Flow',
+            message: `You spent ${formatCurrency(Math.abs(balance))} more than you earned this ${period}. Consider reviewing your expenses.`,
+            icon: '⚠️'
+        });
+    }
+    
+    // Savings Rate insight
+    const savingsRate = income > 0 ? (balance / income) * 100 : 0;
+    if (savingsRate >= 20) {
+        insights.push({
+            type: 'positive',
+            title: 'Excellent Savings Rate',
+            message: `Your savings rate of ${savingsRate.toFixed(1)}% is excellent! Keep up the good financial habits.`,
+            icon: '🎯'
+        });
+    } else if (savingsRate >= 10) {
+        insights.push({
+            type: 'neutral',
+            title: 'Good Savings Rate',
+            message: `Your savings rate of ${savingsRate.toFixed(1)}% is good. Consider increasing it to 20% for optimal financial health.`,
+            icon: '📈'
+        });
+    } else if (income > 0) {
+        insights.push({
+            type: 'warning',
+            title: 'Low Savings Rate',
+            message: `Your savings rate of ${savingsRate.toFixed(1)}% could be improved. Try to save at least 10% of your income.`,
+            icon: '📊'
+        });
+    }
+    
+    // Top spending category insight
+    const expensesByCategory = calculateExpensesByCategory(period);
+    const topCategory = findTopSpendingCategory(expensesByCategory);
+    
+    if (topCategory && expenses > 0) {
+        const percentage = (topCategory.amount / expenses) * 100;
+        if (percentage > 40) {
+            insights.push({
+                type: 'warning',
+                title: 'High Category Spending',
+                message: `${topCategory.name} accounts for ${percentage.toFixed(1)}% of your spending. Consider if this allocation aligns with your goals.`,
+                icon: '🏷️'
+            });
+        }
+    }
+    
+    // Budget performance insight
+    const budgetInsight = analyzeBudgetPerformance();
+    if (budgetInsight) {
+        insights.push(budgetInsight);
+    }
+    
+    return insights;
+}
+
