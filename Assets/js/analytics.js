@@ -359,3 +359,64 @@ function createInsightCard(insight) {
 
     return card;
 }
+
+/**
+ * Update budget performance display
+ */
+function updateBudgetPerformance() {
+    const container = document.getElementById('budget-performance-container');
+    if (!container) return;
+    
+    const expensesByCategory = calculateExpensesByCategory('month');
+    const settings = getSettings();
+    const categories = getCategoriesByType('expense');
+    
+    container.innerHTML = '';
+    
+    // Filter categories with budgets
+    const budgetCategories = categories.filter(cat => settings.budgets[cat.id] > 0);
+    
+    if (budgetCategories.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <p>No budgets set</p>
+                <a href="settings.html" class="btn primary">Set Up Budgets</a>
+            </div>
+        `;
+        return;
+    }
+    
+    budgetCategories.forEach(category => {
+        const budget = settings.budgets[category.id];
+        const spent = expensesByCategory[category.id] || 0;
+        const percentage = Math.min((spent / budget) * 100, 100);
+        const isOverBudget = spent > budget;
+        
+        const budgetBar = document.createElement('div');
+        budgetBar.className = 'budget-bar';
+        
+        budgetBar.innerHTML = `
+            <div class="budget-header">
+                <div class="budget-category">
+                    <span class="category-icon">${category.icon}</span>
+                    <span class="category-name">${category.name}</span>
+                </div>
+                <div class="budget-amounts">
+                    <span class="spent-amount ${isOverBudget ? 'over-budget' : ''}">${formatCurrency(spent)}</span>
+                    <span class="budget-separator">/</span>
+                    <span class="budget-amount">${formatCurrency(budget)}</span>
+                </div>
+            </div>
+            <div class="budget-progress">
+                <div class="progress-track">
+                    <div class="progress-fill ${isOverBudget ? 'over-budget' : ''}" 
+                         style="width: ${percentage}%"></div>
+                </div>
+                <div class="budget-percentage">${percentage.toFixed(1)}%</div>
+            </div>
+            ${isOverBudget ? `<div class="over-budget-warning">Over budget by ${formatCurrency(spent - budget)}</div>` : ''}
+        `;
+        
+        container.appendChild(budgetBar);
+    });
+}
