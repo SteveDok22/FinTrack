@@ -21,22 +21,30 @@ function initializeTransactionsPage() {
     try {
         // Load all transactions
         loadTransactions();
-        
+
         // Set up event listeners
         setupTransactionsEventListeners();
-        
+
         // Populate filter dropdowns
         populateFilterDropdowns();
-        
+
         // Apply default filters
         applyFilters();
-        
+
         console.log('Transactions page initialized successfully');
-        
+
     } catch (error) {
         console.error('Failed to initialize transactions page:', error);
         showNotification('Failed to load transactions page', 'error');
     }
+}
+
+/**
+ * Load all transactions from storage
+ */
+function loadTransactions() {
+    TransactionsPage.currentTransactions = getTransactions();
+    TransactionsPage.filteredTransactions = [...TransactionsPage.currentTransactions];
 }
 
 /**
@@ -48,54 +56,60 @@ function setupTransactionsEventListeners() {
     if (searchInput) {
         searchInput.addEventListener('input', debounce(handleSearchChange, 300));
     }
-    
+
     // Clear search
     const clearSearch = document.getElementById('clear-search');
     if (clearSearch) {
         clearSearch.addEventListener('click', clearSearch);
     }
-    
+
     // Filter dropdowns
     const typeFilter = document.getElementById('type-filter');
     const categoryFilter = document.getElementById('category-filter');
     const periodFilter = document.getElementById('period-filter');
-    
+
     if (typeFilter) typeFilter.addEventListener('change', handleFilterChange);
     if (categoryFilter) categoryFilter.addEventListener('change', handleFilterChange);
     if (periodFilter) periodFilter.addEventListener('change', handleFilterChange);
-    
+
     // Reset filters
     const resetFilters = document.getElementById('reset-filters');
     if (resetFilters) {
         resetFilters.addEventListener('click', resetAllFilters);
     }
-    
+
     // Sort dropdown
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
         sortSelect.addEventListener('change', handleSortChange);
     }
-    
+
     // Export button
     const exportBtn = document.getElementById('export-btn');
     if (exportBtn) {
         exportBtn.addEventListener('click', exportTransactions);
     }
-    
+
     // Edit form submission
     const editForm = document.getElementById('edit-form');
     if (editForm) {
         editForm.addEventListener('submit', handleEditSubmit);
     }
-    
+
+    // Delete button
+    const deleteBtn = document.getElementById('delete-transaction-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', handleDeleteTransaction);
+    }
+
     // Table header sorting
     const sortableHeaders = document.querySelectorAll('.sortable');
     sortableHeaders.forEach(header => {
-        header.addEventListener('click', function() {
+        header.addEventListener('click', function () {
             handleHeaderSort(this.dataset.sort);
         });
     });
-    
+
     // Pagination
     const prevPage = document.getElementById('prev-page');
     const nextPage = document.getElementById('next-page');
@@ -109,7 +123,7 @@ function setupTransactionsEventListeners() {
 function populateFilterDropdowns() {
     const categoryFilter = document.getElementById('category-filter');
     const editCategorySelect = document.getElementById('edit-transaction-category');
-    
+
     if (categoryFilter) {
         const categories = getCategories();
         categories.forEach(category => {
@@ -119,7 +133,7 @@ function populateFilterDropdowns() {
             categoryFilter.appendChild(option);
         });
     }
-    
+
     // Populate edit form categories
     if (editCategorySelect) {
         const categories = getCategories();
@@ -162,6 +176,28 @@ function handleSortChange(event) {
 }
 
 /**
+ * Handle table header sorting
+ */
+function handleHeaderSort(field) {
+    // Toggle sort order if clicking same field
+    if (TransactionsPage.currentSort.field === field) {
+        TransactionsPage.currentSort.order =
+            TransactionsPage.currentSort.order === 'asc' ? 'desc' : 'asc';
+    } else {
+        TransactionsPage.currentSort = { field, order: 'desc' };
+    }
+
+    // Update sort dropdown
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+        sortSelect.value = `${field}-${TransactionsPage.currentSort.order}`;
+    }
+
+    applyFilters();
+    updateSortHeaders();
+}
+
+/**
  * Update sort header indicators
  */
 function updateSortHeaders() {
@@ -169,7 +205,7 @@ function updateSortHeaders() {
     headers.forEach(header => {
         const icon = header.querySelector('.sort-icon');
         header.classList.remove('sort-asc', 'sort-desc');
-        
+
         if (header.dataset.sort === TransactionsPage.currentSort.field) {
             header.classList.add(`sort-${TransactionsPage.currentSort.order}`);
             icon.textContent = TransactionsPage.currentSort.order === 'asc' ? '↑' : '↓';
@@ -185,41 +221,41 @@ function updateSortHeaders() {
 function applyFilters() {
     let filtered = [...TransactionsPage.currentTransactions];
     const filters = TransactionsPage.currentFilters;
-    
+
     // Apply search filter
     if (filters.search) {
         filtered = filtered.filter(transaction => {
             const category = getCategoryById(transaction.category);
             const categoryName = category ? category.name.toLowerCase() : '';
             const description = (transaction.description || '').toLowerCase();
-            
-            return description.includes(filters.search) || 
-                   categoryName.includes(filters.search);
+
+            return description.includes(filters.search) ||
+                categoryName.includes(filters.search);
         });
     }
-    
+
     // Apply type filter
     if (filters.type !== 'all') {
         filtered = filtered.filter(t => t.type === filters.type);
     }
-    
+
     // Apply category filter
     if (filters.category !== 'all') {
         filtered = filtered.filter(t => t.category === filters.category);
     }
-    
+
     // Apply period filter
     if (filters.period !== 'all') {
         const dateRange = getDateRange(filters.period);
         filtered = filterTransactionsByDateRange(filtered, dateRange.start, dateRange.end);
     }
-    
+
     // Apply sorting
     const { field, order } = TransactionsPage.currentSort;
     filtered = sortBy(filtered, field, order);
-    
+
     TransactionsPage.filteredTransactions = filtered;
-    
+
     // Update display
     updateTransactionsSummary();
     updateTransactionsTable();
@@ -232,14 +268,14 @@ function applyFilters() {
  */
 function updateTransactionsSummary() {
     const transactions = TransactionsPage.filteredTransactions;
-    
+
     const totalCount = transactions.length;
     const totalIncome = transactions.filter(t => t.type === 'income')
         .reduce((sum, t) => sum + t.amount, 0);
     const totalExpenses = transactions.filter(t => t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
     const balance = totalIncome - totalExpenses;
-    
+
     // Update summary cards
     const elements = {
         'total-count': totalCount.toString(),
@@ -247,7 +283,21 @@ function updateTransactionsSummary() {
         'filtered-expenses': formatCurrency(totalExpenses),
         'filtered-balance': formatCurrency(balance)
     };
-    
+
+    Object.entries(elements).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+
+            // Add color classes for balance
+            if (id === 'filtered-balance') {
+                element.className = 'summary-value';
+                if (balance > 0) element.classList.add('positive');
+                else if (balance < 0) element.classList.add('negative');
+            }
+        }
+    });
+
     // Update showing results text
     const showingResults = document.getElementById('showing-results');
     if (showingResults) {
@@ -267,26 +317,26 @@ function updateTransactionsTable() {
     const tbody = document.getElementById('transactions-tbody');
     const emptyState = document.getElementById('empty-state');
     const tableContainer = document.querySelector('.table-container');
-    
+
     if (!tbody) return;
-    
+
     const transactions = TransactionsPage.filteredTransactions;
-    
+
     if (transactions.length === 0) {
         tbody.innerHTML = '';
         if (emptyState) emptyState.style.display = 'block';
         if (tableContainer) tableContainer.style.display = 'none';
         return;
     }
-    
+
     if (emptyState) emptyState.style.display = 'none';
     if (tableContainer) tableContainer.style.display = 'block';
-    
+
     // Calculate pagination
     const startIndex = (TransactionsPage.currentPage - 1) * TransactionsPage.itemsPerPage;
     const endIndex = startIndex + TransactionsPage.itemsPerPage;
     const pageTransactions = transactions.slice(startIndex, endIndex);
-    
+
     // Generate table rows
     tbody.innerHTML = '';
     pageTransactions.forEach(transaction => {
@@ -302,14 +352,14 @@ function createTransactionRow(transaction) {
     const row = document.createElement('tr');
     row.className = `transaction-row ${transaction.type}`;
     row.dataset.id = transaction.id;
-    
+
     const category = getCategoryById(transaction.category);
     const categoryName = category ? category.name : 'Unknown';
     const categoryIcon = category ? category.icon : '📋';
-    
+
     const amountClass = transaction.type === 'income' ? 'positive' : 'negative';
     const amountPrefix = transaction.type === 'income' ? '+' : '-';
-    
+
     row.innerHTML = `
         <td class="date-cell">${formatDate(transaction.date)}</td>
         <td class="description-cell">
@@ -317,6 +367,9 @@ function createTransactionRow(transaction) {
                 <span class="category-icon">${categoryIcon}</span>
                 <span class="description-text">${transaction.description || categoryName}</span>
             </div>
+        </td>
+        <td class="category-cell">
+            <span class="category-badge">${categoryName}</span>
         </td>
         <td class="type-cell">
             <span class="type-badge ${transaction.type}">${capitalize(transaction.type)}</span>
@@ -331,7 +384,7 @@ function createTransactionRow(transaction) {
             </button>
         </td>
     `;
-    
+
     return row;
 }
 
@@ -343,25 +396,25 @@ function updatePagination() {
     const prevBtn = document.getElementById('prev-page');
     const nextBtn = document.getElementById('next-page');
     const pageInfo = document.getElementById('page-info');
-    
+
     const totalItems = TransactionsPage.filteredTransactions.length;
     const totalPages = Math.ceil(totalItems / TransactionsPage.itemsPerPage);
-    
+
     if (totalPages <= 1) {
         if (paginationContainer) paginationContainer.style.display = 'none';
         return;
     }
-    
+
     if (paginationContainer) paginationContainer.style.display = 'flex';
-    
+
     if (prevBtn) {
         prevBtn.disabled = TransactionsPage.currentPage === 1;
     }
-    
+
     if (nextBtn) {
         nextBtn.disabled = TransactionsPage.currentPage === totalPages;
     }
-    
+
     if (pageInfo) {
         pageInfo.textContent = `Page ${TransactionsPage.currentPage} of ${totalPages}`;
     }
@@ -374,9 +427,9 @@ function changePage(direction) {
     const totalPages = Math.ceil(
         TransactionsPage.filteredTransactions.length / TransactionsPage.itemsPerPage
     );
-    
+
     const newPage = TransactionsPage.currentPage + direction;
-    
+
     if (newPage >= 1 && newPage <= totalPages) {
         TransactionsPage.currentPage = newPage;
         updateTransactionsTable();
@@ -389,25 +442,25 @@ function changePage(direction) {
  */
 function resetAllFilters() {
     // Reset filter values
-    TransactionsPage.currentFilters = { 
-        type: 'all', 
-        category: 'all', 
-        period: 'all', 
-        search: '' 
+    TransactionsPage.currentFilters = {
+        type: 'all',
+        category: 'all',
+        period: 'all',
+        search: ''
     };
     TransactionsPage.currentPage = 1;
-    
+
     // Reset UI elements
     const searchInput = document.getElementById('search-input');
     const typeFilter = document.getElementById('type-filter');
     const categoryFilter = document.getElementById('category-filter');
     const periodFilter = document.getElementById('period-filter');
-    
+
     if (searchInput) searchInput.value = '';
     if (typeFilter) typeFilter.value = 'all';
     if (categoryFilter) categoryFilter.value = 'all';
     if (periodFilter) periodFilter.value = 'all';
-    
+
     applyFilters();
     showNotification('Filters reset successfully', 'success');
 }
@@ -430,9 +483,9 @@ function clearSearchInput() {
 function editTransaction(transactionId) {
     const transaction = TransactionsPage.currentTransactions.find(t => t.id === transactionId);
     if (!transaction) return;
-    
+
     TransactionsPage.editingTransaction = transaction;
-    
+
     // Populate edit form
     document.getElementById('edit-transaction-id').value = transaction.id;
     document.getElementById('edit-transaction-type').value = transaction.type;
@@ -440,10 +493,10 @@ function editTransaction(transactionId) {
     document.getElementById('edit-transaction-category').value = transaction.category;
     document.getElementById('edit-transaction-description').value = transaction.description || '';
     document.getElementById('edit-transaction-date').value = transaction.date;
-    
+
     // Update category options based on type
     updateEditCategoryOptions(transaction.type);
-    
+
     // Show modal
     const modal = document.getElementById('edit-modal');
     if (modal) {
@@ -458,19 +511,19 @@ function editTransaction(transactionId) {
 function updateEditCategoryOptions(transactionType) {
     const categorySelect = document.getElementById('edit-transaction-category');
     const currentValue = categorySelect.value;
-    
+
     if (!categorySelect) return;
-    
+
     const categories = getCategoriesByType(transactionType);
     categorySelect.innerHTML = '';
-    
+
     categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category.id;
         option.textContent = `${category.icon} ${category.name}`;
         categorySelect.appendChild(option);
     });
-    
+
     // Restore selection if valid
     if (categories.find(c => c.id === currentValue)) {
         categorySelect.value = currentValue;
@@ -482,7 +535,7 @@ function updateEditCategoryOptions(transactionType) {
  */
 function handleEditSubmit(event) {
     event.preventDefault();
-    
+
     try {
         const formData = new FormData(event.target);
         const transactionId = formData.get('id');
@@ -493,26 +546,26 @@ function handleEditSubmit(event) {
             description: formData.get('description') || '',
             date: formData.get('date')
         };
-        
+
         // Validate data
         if (validateTransaction(updatedData)) {
             // Update transaction
             const updatedTransaction = updateTransaction(transactionId, updatedData);
-            
+
             if (updatedTransaction) {
                 // Close modal
                 closeModal();
-                
+
                 // Reload and refresh display
                 loadTransactions();
                 applyFilters();
-                
+
                 showNotification('Transaction updated successfully!', 'success');
             } else {
                 showNotification('Transaction not found', 'error');
             }
         }
-        
+
     } catch (error) {
         console.error('Error updating transaction:', error);
         showNotification('Failed to update transaction', 'error');
@@ -524,13 +577,13 @@ function handleEditSubmit(event) {
  */
 function handleDeleteTransaction() {
     if (!TransactionsPage.editingTransaction) return;
-    
+
     const confirmed = confirm('Are you sure you want to delete this transaction? This action cannot be undone.');
-    
+
     if (confirmed) {
         try {
             const success = deleteTransaction(TransactionsPage.editingTransaction.id);
-            
+
             if (success) {
                 closeModal();
                 loadTransactions();
@@ -552,21 +605,21 @@ function handleDeleteTransaction() {
 function exportTransactions() {
     try {
         const transactions = TransactionsPage.filteredTransactions;
-        
+
         if (transactions.length === 0) {
             showNotification('No transactions to export', 'warning');
             return;
         }
-        
+
         // Create CSV header
         const headers = ['Date', 'Description', 'Category', 'Type', 'Amount'];
         const csvRows = [headers.join(',')];
-        
+
         // Add transaction rows
         transactions.forEach(transaction => {
             const category = getCategoryById(transaction.category);
             const categoryName = category ? category.name : 'Unknown';
-            
+
             const row = [
                 transaction.date,
                 `"${transaction.description || categoryName}"`,
@@ -576,21 +629,21 @@ function exportTransactions() {
             ];
             csvRows.push(row.join(','));
         });
-        
+
         // Create and download file
         const csvContent = csvRows.join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
-        
+
         const link = document.createElement('a');
         link.href = url;
         link.download = `transactions_${getTodayString()}.csv`;
         link.click();
-        
+
         URL.revokeObjectURL(url);
-        
+
         showNotification(`Exported ${transactions.length} transactions`, 'success');
-        
+
     } catch (error) {
         console.error('Error exporting transactions:', error);
         showNotification('Failed to export transactions', 'error');
@@ -598,7 +651,7 @@ function exportTransactions() {
 }
 
 // Initialize transactions page when DOM loads
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Check if we're on the transactions page
     if (document.getElementById('transactions-table')) {
         initializeTransactionsPage();
