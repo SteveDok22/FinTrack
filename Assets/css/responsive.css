@@ -134,6 +134,11 @@
     font-size: 1.25rem;
   }
 
+  /* Charts section */
+  .chart-container {
+    height: 250px;
+  }
+
   /* Recent transactions */
   .transaction-item {
     flex-direction: column;
@@ -228,6 +233,23 @@
     font-size: 1.25rem;
   }
 
+  /* Table controls */
+  .table-controls {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+  
+  .table-actions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .table-actions select,
+  .table-actions button {
+    width: 100%;
+  }
+
   /* Transactions table */
   .table-container {
     overflow-x: auto;
@@ -249,6 +271,11 @@
 
     .transactions-table .category-cell,
     .transactions-table .type-cell {
+      display: none;
+    }
+
+    .transactions-table th:nth-child(3),
+    .transactions-table th:nth-child(4) {
       display: none;
     }
   }
@@ -295,8 +322,18 @@
       font-size: 0.875rem;
     }
   }
-}
 
+  /* Pagination */
+  .pagination {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .pagination-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+  }
+}
 
 /* ===========================================
    Form and Modal Mobile Styles
@@ -417,11 +454,11 @@
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .summary-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .transactions-table {
     min-width: 500px;
   }
@@ -435,32 +472,32 @@
   .nav-title {
     font-size: 1.5rem;
   }
-  
+
   .balance-amount {
     font-size: 2rem;
   }
-  
+
   .stat-amount {
     font-size: 1.25rem;
   }
-  
+
   .stats-grid,
   .summary-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .category-card {
     padding: var(--spacing-sm);
   }
-  
+
   .transaction-item {
     padding: var(--spacing-sm);
   }
-  
+
   .chart-container {
     height: 200px;
   }
-  
+
   .page-title {
     font-size: 1.5rem;
   }
@@ -471,28 +508,29 @@
    =========================================== */
 
 @media (hover: none) and (pointer: coarse) {
+
   /* Touch-friendly sizing */
   .btn {
     min-height: 44px;
     padding: var(--spacing-md) var(--spacing-lg);
   }
-  
+
   .nav-link {
     min-height: 44px;
     padding: var(--spacing-md);
   }
-  
+
   .modal-close {
     width: 44px;
     height: 44px;
     font-size: 1.25rem;
   }
-  
+
   .notification-close {
     width: 32px;
     height: 32px;
   }
-  
+
   /* Remove hover effects on touch devices */
   .category-card:hover,
   .transaction-item:hover,
@@ -500,17 +538,17 @@
     transform: none;
     box-shadow: var(--shadow-md);
   }
-  
+
   .btn:hover {
     transform: none;
   }
-  
+
   /* Improve tap targets */
   .sortable {
     min-height: 44px;
     padding: var(--spacing-md);
   }
-  
+
   .pagination-btn {
     min-height: 44px;
   }
@@ -528,11 +566,11 @@
     --color-white: #1f2937;
     --color-gray-900: #f9fafb;
   }
-  
+
   .header {
     background: linear-gradient(135deg, var(--color-black) 0%, var(--color-dark-green) 100%);
   }
-  
+
   .modal-overlay {
     background-color: rgba(0, 0, 0, 0.8);
   }
@@ -548,15 +586,15 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .modal.active .modal-content {
     animation: none;
   }
-  
+
   .notification {
     animation: none;
   }
-  
+
   .loading-skeleton {
     animation: none;
     background: var(--color-gray-200);
@@ -574,13 +612,13 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
   }
-  
+
   .btn.primary {
     background: var(--color-neon-green);
     color: var(--color-black);
     border: 2px solid var(--color-black);
   }
-  
+
   .category-card,
   .transaction-item,
   .stat-card {
@@ -598,7 +636,7 @@
     color: black !important;
     box-shadow: none !important;
   }
-  
+
   .header,
   .modal,
   .notification,
@@ -606,29 +644,29 @@
   .actions-section {
     display: none !important;
   }
-  
+
   .main {
     max-width: none;
     margin: 0;
     padding: 0;
   }
-  
+
   .balance-card {
     border: 2px solid black;
     page-break-inside: avoid;
   }
-  
+
   .transactions-table {
     border-collapse: collapse;
     width: 100%;
   }
-  
+
   .transactions-table th,
   .transactions-table td {
     border: 1px solid black;
     padding: 8px;
   }
-  
+
   .page-break {
     page-break-before: always;
   }
