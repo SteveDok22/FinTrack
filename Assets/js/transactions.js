@@ -657,15 +657,3 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeTransactionsPage();
     }
 });
-
-/**
- * Clear search input
- */
-function clearSearchInput() {
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.value = '';
-        TransactionsPage.currentFilters.search = '';
-        applyFilters();
-    }
-}

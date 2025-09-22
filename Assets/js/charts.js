@@ -60,6 +60,12 @@ const DEFAULT_CHART_OPTIONS = {
  * @returns {Chart} Chart.js instance
  */
 function createExpensePieChart(canvasId, period = 'month') {
+
+    if (window.charts && window.charts.dashboard) {
+        window.charts.dashboard.destroy();
+        window.charts.dashboard = null;
+    } 
+
     const canvas = document.getElementById(canvasId);
     if (!canvas) return null;
 
@@ -134,6 +140,12 @@ function createExpensePieChart(canvasId, period = 'month') {
  * @returns {Chart} Chart.js instance
  */
 function createIncomeExpensesLineChart(canvasId, period = 'year') {
+
+    if (window.charts && window.charts.analytics) {
+        window.charts.analytics.destroy();
+        window.charts.analytics = null;
+    }
+    
     const canvas = document.getElementById(canvasId);
     if (!canvas) return null;
 
@@ -250,8 +262,15 @@ function createSpendingTrendsChart(canvasId) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return null;
 
-    try {
-        // Get last 6 months spending data
+      try {
+        
+        // Destroy existing chart if exists
+        if (window.charts && window.charts.spendingTrends) {
+            window.charts.spendingTrends.destroy();
+            window.charts.spendingTrends = null;
+        }
+
+        // Get spending trends data
         const trendData = getSpendingTrendsData();
         
         if (trendData.length === 0) {
@@ -310,6 +329,10 @@ function createSpendingTrendsChart(canvasId) {
                 }
             }
         });
+
+    // SAVE CHART REFERENCE 
+        if (!window.charts) window.charts = {};
+        window.charts.spendingTrends = chart;
 
         return chart;
 
