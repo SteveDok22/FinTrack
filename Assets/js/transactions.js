@@ -60,8 +60,8 @@ function setupTransactionsEventListeners() {
     // Clear search
     const clearSearch = document.getElementById('clear-search');
     if (clearSearch) {
-        clearSearch.addEventListener('click', clearSearch);
-    }
+    clearSearch.addEventListener('click', clearSearchInput);
+}
 
     // Filter dropdowns
     const typeFilter = document.getElementById('type-filter');
@@ -657,3 +657,15 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeTransactionsPage();
     }
 });
+
+/**
+ * Clear search input
+ */
+function clearSearchInput() {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.value = '';
+        TransactionsPage.currentFilters.search = '';
+        applyFilters();
+    }
+}
