@@ -19,13 +19,12 @@ A modern, responsive financial tracking application built with vanilla HTML, CSS
 
 **Purpose:** Create a comprehensive personal finance management application that helps users track expenses, manage budgets, and make informed financial decisions through intuitive visualizations.
 
-**Live Website:** [See deployed website](https://stevedok22.github.io/FinTrack/)
+**Live Website:** [https://stevedok22.github.io/personal-finance-dashboard/](https://stevedok22.github.io/personal-finance-dashboard/)
 
 <div align="center">
 
-![Product Pages Grid](assets/images/sceenshots/)
-
-*FinTrack website displayed across multiple devices - showcasing responsive design*
+![Dashboard Preview](Assets/images/screenshots/dashboard-preview.png)
+*Personal Finance Dashboard displayed across multiple devices - showcasing responsive design*
 
 </div>
 
@@ -45,45 +44,79 @@ A modern, responsive financial tracking application built with vanilla HTML, CSS
 ## Features
 
 ### Core Functionality
-- **Dashboard Overview:** Real-time financial summary with balance, income, and expenses
-- **Transaction Management:** Add, edit, and categorize financial transactions
-- **Budget Tracking:** Set monthly budgets and monitor spending progress
-- **Data Visualization:** Interactive charts showing spending patterns and trends
-- **Responsive Design:** Optimized for desktop, tablet, and mobile devices
+- **Real-time Dashboard:** Financial summary with current balance, monthly income/expenses, and savings rate calculation
+- **Transaction Management:** Complete CRUD operations (Create, Read, Update, Delete) with form validation
+- **Smart Categorization:** 10+ pre-configured categories (Food, Transport, Entertainment, etc.) with custom icons
+- **Budget Tracking:** Monthly budget setting with visual progress indicators and over-budget warnings
+- **Data Visualization:** Interactive charts showing spending patterns and financial trends using Chart.js
+- **Advanced Search & Filtering:** Filter by date ranges, categories, amounts, and transaction types
+- **CSV Export:** Export transaction data for external analysis and record-keeping
+- **Responsive Design:** Mobile-first approach optimized for all screen sizes (320px to 1920px+)
 
-### Page Structure
-- **Dashboard (index.html):** Main financial overview with charts and quick stats
-- **Transactions (pages/transactions.html):** Detailed transaction management with filters
-- **Analytics (pages/analytics.html):** Advanced charts and financial insights
-- **Settings (pages/settings.html):** Category management and user preferences
+### Advanced Features
+- **Local Data Persistence:** Complete privacy with browser-based LocalStorage (no server required)
+- **Real-time Calculations:** Instant balance updates and savings rate computation
+- **Touch Optimization:** Mobile gestures and touch-friendly interfaces for smartphones/tablets
+- **Accessibility Compliance:** WCAG 2.1 AA standards with screen reader support
+- **Progressive Enhancement:** Core functionality works without JavaScript, enhanced with JS
+- **Error Handling:** Comprehensive validation with user-friendly error messages
+- **Performance Optimization:** Sub-second response times with efficient data processing
 
-### Interactive Elements
-- **Add Transaction Modal:** Quick transaction entry form
-- **Filter System:** Search and filter transactions by date, category, and amount
-- **Chart Interactions:** Interactive financial charts using Chart.js
-- **Category Management:** Customizable expense and income categories
-- **Responsive Navigation:** Mobile-friendly navigation system
+### Page Architecture
+- **Dashboard (index.html):** Main overview with balance cards, quick stats, expense charts, and recent transactions
+- **Transactions (pages/transactions.html):** Comprehensive management with pagination, sorting, and bulk operations  
+- **Analytics (pages/analytics.html):** Advanced insights with multiple chart types and financial recommendations
+- **Settings (pages/settings.html):** Category management and user preferences (expandable architecture)
+
+### Interactive Components
+- **Modal-based Forms:** Add/Edit transactions with context-sensitive validation
+- **Dynamic Charts:** Pie charts for category breakdown, line charts for trends, bar charts for comparisons
+- **Intelligent Filters:** Auto-complete search with real-time results filtering
+- **Responsive Navigation:** Collapsible mobile menu with touch-optimized controls
+- **Contextual Help:** Inline guidance and tooltips for user assistance
 
 ## Technologies Used
 
+**Frontend Technologies:**
 - **HTML5:** Semantic markup with accessibility features
 - **CSS3:** Modern styling with CSS Grid, Flexbox, and custom properties
 - **Vanilla JavaScript (ES6+):** Modular architecture with no frameworks
-- **Chart.js:** Interactive data visualization library
-- **LocalStorage API:** Client-side data persistence
-- **Responsive Design:** Mobile-first approach with fluid layouts
+- **Chart.js 3.9.1:** Interactive data visualization library via CloudFlare CDN
+- **LocalStorage API:** HTML5 Web Storage specification for client-side persistence
+- **Responsive Design:** Mobile-first approach with fluid layouts and touch optimization
+
+**Development Tools:**
+- **Visual Studio Code 1.84+** with Live Server extension
+- **Chrome DevTools** for debugging and performance analysis
+- **Git** for version control and GitHub Pages deployment
+
+**Browser Support:**
+- **Chrome 60+, Firefox 60+, Safari 12+, Edge 79+**
+- **Mobile:** iOS Safari 12+, Android Chrome 60+
+- **JavaScript:** ES6+ features (arrow functions, destructuring, template literals)
+- **Storage:** LocalStorage with 5MB+ capacity requirement
 
 ## Installation & Setup
 
-### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Text editor (VS Code recommended)
-- Live Server extension (for development)
+## Installation & Setup
 
-### Local Development
-1. **Clone or download the project files**
-2. **Open the project folder in your text editor**
-3. **Launch with Live Server or open index.html in your browser**
+### System Requirements
+- **Browser Compatibility:** Chrome 60+, Firefox 60+, Safari 12+, Edge 79+
+- **JavaScript:** ES6+ support enabled
+- **Storage:** LocalStorage with 5MB+ available capacity
+- **Screen Resolution:** Minimum 320px width for mobile optimization
+- **Network:** Internet connection for Chart.js CDN (first load only)
+
+### Prerequisites
+- **Text Editor:** Visual Studio Code recommended with Live Server extension
+- **Git:** Version control for development workflow (optional)
+- **Modern Browser:** Latest version for optimal performance
+
+### Local Development Setup
+1. **Clone or Download Project Files:**
+```bash
+   git clone https://github.com/stevedok22/personal-finance-dashboard.git
+   cd personal-finance-dashboard
 
 ### Project Structure Setup
 ```bash
@@ -182,7 +215,26 @@ personal-finance-dashboard/
 - **Accessibility:** Semantic HTML and ARIA labels for screen readers
 
 ### Challenges & Solutions
-[To be updated during development]
+
+**Challenge 1: Real-time Dashboard Updates**
+- **Issue:** Dashboard data not updating after transaction changes
+- **Solution:** Implemented observer pattern with `refreshDashboard()` function that updates all components
+- **Reference:** [Observer Pattern in JavaScript](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#observerpatternjavascript)
+
+**Challenge 2: Chart.js Responsive Behavior**  
+- **Issue:** Charts not resizing properly on mobile devices
+- **Solution:** Added `window.addEventListener('resize', debounce(resizeCharts, 250))` with debounced resize handler
+- **Reference:** [Chart.js Responsive Documentation](https://www.chartjs.org/docs/latest/configuration/responsive.html)
+
+**Challenge 3: LocalStorage Quota Management**
+- **Issue:** Potential storage limits with large transaction datasets
+- **Solution:** Implemented data validation and compression in `storage.js`
+- **Reference:** [Web Storage API Limits](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API#Storage_limits_and_eviction_criteria)
+
+**Challenge 4: Form Validation UX**
+- **Issue:** Poor user experience with validation errors
+- **Solution:** Real-time validation with immediate feedback using `validateTransaction()` function
+- **Reference:** [Form Validation Best Practices](https://web.dev/learn/forms/validation/)
 
 ## Testing
 
