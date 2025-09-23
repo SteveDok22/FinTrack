@@ -3,6 +3,47 @@
    Mobile-first responsive breakpoints and optimizations
    =========================================== */
 
+   /* ===========================================
+   Mobile Scroll (767px and below)
+   =========================================== */ 
+
+   /* Preventing horizontal scrolling */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+* {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Fixes for tables */
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+.transactions-table {
+    min-width: 100%;
+    width: auto;
+}
+
+/* Fixes for modals */
+.modal-content {
+    max-width: calc(100vw - 2rem);
+    margin: 1rem;
+}
+
+/* Corrections for forms */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    max-width: 100%;
+    min-width: 0;
+}
+
 /* ===========================================
    Tablet Styles (768px - 1023px)
    =========================================== */
