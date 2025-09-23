@@ -61,13 +61,23 @@ const DEFAULT_CHART_OPTIONS = {
  */
 function createExpensePieChart(canvasId, period = 'month') {
 
-    if (window.charts && window.charts.dashboard) {
-        window.charts.dashboard.destroy();
-        window.charts.dashboard = null;
-    } 
+   if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded');
+        return null;
+    }
 
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return null;
+    if (!canvas) {
+        console.error('Canvas element not found:', canvasId);
+        return null;
+    }
+
+    Chart.getChart(canvas)?.destroy();
+
+    if (window.charts && window.charts.dashboard) {
+    window.charts.dashboard.destroy();
+    window.charts.dashboard = null;
+}
 
     try {
         // Get expense data by category
@@ -86,11 +96,6 @@ function createExpensePieChart(canvasId, period = 'month') {
 
         if (dataWithExpenses.length === 0) {
             return createEmptyChart(canvas, 'No expense data available');
-        }
-
-        // Destroy existing chart
-        if (window.charts.dashboard) {
-            window.charts.dashboard.destroy();
         }
 
         const ctx = canvas.getContext('2d');

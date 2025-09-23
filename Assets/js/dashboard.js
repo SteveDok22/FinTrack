@@ -238,37 +238,50 @@ function initializeDashboardChart() {
     
     try {
         // Destroy existing chart if it exists
-        if (window.dashboardChart) {
-            window.dashboardChart.destroy();
-        }
+        if (window.dashboardChart && typeof window.dashboardChart.destroy === 'function') {
+    window.dashboardChart.destroy();
+    window.dashboardChart = null;
+}
+
+
+        if (window.charts && window.charts.dashboard && typeof window.charts.dashboard.destroy === 'function') {
+    window.charts.dashboard.destroy();
+    window.charts.dashboard = null;
+}
         
         const expensesByCategory = calculateExpensesByCategory('month');
         const categories = getCategoriesByType('expense');
         
         // Filter out categories with no spending
-        const dataWithSpending = categories
-            .filter(cat => expensesByCategory[cat.id] > 0)
-            .map(cat => ({
-                label: cat.name,
-                value: expensesByCategory[cat.id],
-                color: cat.color
-            }));
+        
+      const dataWithSpending = [];
+      categories.forEach(cat => {
+        const amount = expensesByCategory[cat.id] || 0;
+          if (amount > 0) {
+            dataWithSpending.push({
+              label: cat.name,
+              value: amount,
+              color: cat.color || getCategoryColor(cat.id)
+     });
+    }
+});
         
         if (dataWithSpending.length === 0) {
-            chartCanvas.style.display = 'none';
-            const container = chartCanvas.parentElement;
-            container.innerHTML = `
-                <div class="empty-chart-state">
-                    <p>No expense data to display</p>
-                    <button class="btn primary" onclick="openAddTransactionModal()">Add Expense</button>
-                </div>
-            `;
-            return;
-        }
+    const container = chartCanvas.parentElement;
+    container.innerHTML = `
+        <div class="empty-chart-state">
+            <div class="empty-chart-icon">📊</div>
+            <p>No expense data to display</p>
+            <p>Add some expense transactions to see your spending breakdown</p>
+            <button class="btn primary" onclick="openAddTransactionModal()">Add Transaction</button>
+        </div>
+    `;
+    return;
+}
         
         // Create pie chart
         const ctx = chartCanvas.getContext('2d');
-        window.dashboardChart = new Chart(ctx, {
+        window.charts.dashboard = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: dataWithSpending.map(d => d.label),
@@ -308,10 +321,22 @@ function initializeDashboardChart() {
             }
         });
         
+        window.dashboardChart = window.charts.dashboard; 
+        console.log('Dashboard chart created successfully');
+        
     } catch (error) {
         console.error('Failed to initialize dashboard chart:', error);
-    }
+    const container = chartCanvas.parentElement;
+    container.innerHTML = `
+        <div class="empty-chart-state">
+            <div class="empty-chart-icon">⚠️</div>
+            <p>Chart failed to load</p>
+            <button class="btn primary" onclick="openAddTransactionModal()">Add Transaction</button>
+            <button class="btn secondary" onclick="location.reload()" style="margin-top: 10px;">Refresh Page</button>
+        </div>
+    `;}
 }
+
 
 /**
  * Set up dashboard-specific event listeners
@@ -417,3 +442,9 @@ window.addEventListener('resize', debounce(() => {
         window.dashboardChart.resize();
     }
 }, 250));
+
+setTimeout(() => {
+    if (document.getElementById('expense-chart')) {
+        initializeDashboardChart();
+    }
+}, 1000);
