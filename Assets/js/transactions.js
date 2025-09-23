@@ -115,6 +115,28 @@ function setupTransactionsEventListeners() {
     const nextPage = document.getElementById('next-page');
     if (prevPage) prevPage.addEventListener('click', () => changePage(-1));
     if (nextPage) nextPage.addEventListener('click', () => changePage(1));
+
+    const editTypeSelect = document.getElementById('edit-transaction-type');
+if (editTypeSelect) {
+    editTypeSelect.addEventListener('change', function() {
+        updateEditCategoryOptions(this.value);
+    });
+}
+
+const editModalCloses = document.querySelectorAll('#edit-modal .modal-close');
+editModalCloses.forEach(closeBtn => {
+    closeBtn.addEventListener('click', closeEditModal);
+});
+
+const editCancelBtn = document.querySelector('#edit-form .btn.secondary');
+if (editCancelBtn) {
+    editCancelBtn.addEventListener('click', closeEditModal);
+}
+
+const editModalOverlay = document.querySelector('#edit-modal .modal-overlay');
+if (editModalOverlay) {
+    editModalOverlay.addEventListener('click', closeEditModal);
+}
 }
 
 /**
@@ -536,6 +558,11 @@ function updateEditCategoryOptions(transactionType) {
 function handleEditSubmit(event) {
     event.preventDefault();
 
+    if (!TransactionsPage.editingTransaction) {
+        showNotification('No transaction selected for editing', 'error');
+        return;
+    }
+
     try {
         const formData = new FormData(event.target);
         const transactionId = formData.get('id');
@@ -554,21 +581,23 @@ function handleEditSubmit(event) {
 
             if (updatedTransaction) {
                 // Close modal
-                closeModal();
-
-                // Reload and refresh display
+                closeEditModal();
                 loadTransactions();
                 applyFilters();
 
+                if (typeof refreshDashboard === 'function') {
+                    refreshDashboard();
+                }
+
                 showNotification('Transaction updated successfully!', 'success');
             } else {
-                showNotification('Transaction not found', 'error');
+                showNotification('Failed to update transaction - not found', 'error');
             }
         }
 
     } catch (error) {
         console.error('Error updating transaction:', error);
-        showNotification('Failed to update transaction', 'error');
+        showNotification('Failed to update transaction. Please try again.', 'error');
     }
 }
 
@@ -576,25 +605,37 @@ function handleEditSubmit(event) {
  * Handle delete transaction
  */
 function handleDeleteTransaction() {
-    if (!TransactionsPage.editingTransaction) return;
+    if (!TransactionsPage.editingTransaction) {
+        showNotification('No transaction selected', 'error');
+        return;
+    }
 
-    const confirmed = confirm('Are you sure you want to delete this transaction? This action cannot be undone.');
-
-    if (confirmed) {
+    const transaction = TransactionsPage.editingTransaction;
+    const confirmMessage = `Are you sure you want to delete this transaction?\n\n` +
+        `${transaction.description || 'Transaction'}\n` +
+        `${formatCurrency(transaction.amount)}\n` +
+        `${formatDate(transaction.date)}\n\n` +
+        `This action cannot be undone.`;
+    if (confirm(confirmMessage)) {
         try {
-            const success = deleteTransaction(TransactionsPage.editingTransaction.id);
+            const success = deleteTransaction(transaction.id);
 
             if (success) {
-                closeModal();
+                closeEditModal();
                 loadTransactions();
                 applyFilters();
+
+                if (typeof refreshDashboard === 'function') {
+                    refreshDashboard();
+                }
+
                 showNotification('Transaction deleted successfully!', 'success');
             } else {
-                showNotification('Failed to delete transaction', 'error');
+                showNotification('Failed to delete transaction - not found', 'error');
             }
         } catch (error) {
             console.error('Error deleting transaction:', error);
-            showNotification('Failed to delete transaction', 'error');
+            showNotification('Failed to delete transaction. Please try again.', 'error');
         }
     }
 }
@@ -611,6 +652,14 @@ function exportTransactions() {
             return;
         }
 
+        const exportBtn = document.getElementById('export-btn');
+        const originalText = exportBtn ? exportBtn.textContent : '';
+        
+        if (exportBtn) {
+            exportBtn.disabled = true;
+            exportBtn.textContent = 'Exporting...';
+        }
+
         // Create CSV header
         const headers = ['Date', 'Description', 'Category', 'Type', 'Amount'];
         const csvRows = [headers.join(',')];
@@ -622,31 +671,39 @@ function exportTransactions() {
 
             const row = [
                 transaction.date,
-                `"${transaction.description || categoryName}"`,
+                `"${(transaction.description || categoryName).replace(/"/g, '""')}"`,
                 `"${categoryName}"`,
                 transaction.type,
-                transaction.amount
+                transaction.amount.toFixed(2)
             ];
             csvRows.push(row.join(','));
         });
 
         // Create and download file
         const csvContent = csvRows.join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
         link.href = url;
         link.download = `transactions_${getTodayString()}.csv`;
+        
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
 
         URL.revokeObjectURL(url);
-
-        showNotification(`Exported ${transactions.length} transactions`, 'success');
+        showNotification(`Successfully exported ${transactions.length} transactions`, 'success');
 
     } catch (error) {
         console.error('Error exporting transactions:', error);
-        showNotification('Failed to export transactions', 'error');
+        showNotification('Failed to export transactions. Please try again.', 'error');
+    } finally {
+        const exportBtn = document.getElementById('export-btn');
+        if (exportBtn) {
+            exportBtn.disabled = false;
+            exportBtn.textContent = 'Export CSV';
+        }
     }
 }
 
@@ -657,3 +714,21 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeTransactionsPage();
     }
 });
+
+/**
+ * Close edit modal
+ */
+function closeEditModal() {
+    const modal = document.getElementById('edit-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+    
+    TransactionsPage.editingTransaction = null;
+    
+    const form = document.getElementById('edit-form');
+    if (form) {
+        form.reset();
+    }
+}

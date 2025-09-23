@@ -1016,3 +1016,85 @@
   background-color: rgba(239, 68, 68, 0.1);
   color: var(--color-error);
 }
+
+/* Fixes for the edit modal */
+#edit-modal .modal-content {
+    max-height: 95vh;
+    overflow-y: auto;
+}
+
+#edit-modal .form-actions {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+#edit-modal .btn.danger {
+    order: -1;
+    margin-right: auto;
+}
+
+/* Improved styles for action buttons */
+.actions-cell {
+    white-space: nowrap;
+    width: 80px;
+    text-align: center;
+}
+
+.actions-cell .btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    min-width: 36px;
+    height: 36px;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+}
+
+/* Loading indication */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Sortable headings */
+.sortable {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: background-color var(--transition-fast);
+}
+
+.sortable:hover {
+    background-color: var(--color-gray-100);
+}
+
+.sortable .sort-icon {
+    margin-left: var(--spacing-xs);
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.sortable.sort-asc .sort-icon,
+.sortable.sort-desc .sort-icon {
+    opacity: 1;
+    color: var(--color-neon-green);
+}

@@ -338,6 +338,21 @@ personal-finance-dashboard/
 
 </div>
 
+### Performance Testing
+
+<div align="center">
+
+#### Website Performance Analysis
+
+| Desktop Performance | Mobile Performance |
+|-------------------|------------------|
+| ![Performance Metrics](Assets/images/screenshot/DesktopSeed.png) | ![Performance Metrics](Assets/images/screenshot/MobileReportSpeed.png) |
+| **[Test Desktop Performance →](https://pagespeed.web.dev/analysis/https-stevedok22-github-io-Hype-coffee/0hmd3jrvcx?form_factor=desktop)** | **[Test Mobile Performance →](https://pagespeed.web.dev/analysis/https-stevedok22-github-io-Hype-coffee/0hmd3jrvcx?form_factor=mobile)** |
+
+*Performance testing results showing optimized loading times and smooth animations*
+
+</div>
+
 ## Deployment
 
 ### GitHub Pages (Recommended)

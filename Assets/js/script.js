@@ -202,10 +202,18 @@ function closeModal() {
 /**
  * Handle transaction form submission
  */
-function handleTransactionSubmit(event) {
+ function handleTransactionSubmit(event) {
     event.preventDefault();
 
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalText = submitButton ? submitButton.textContent : '';
+
     try {
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Adding...';
+        }
+
         const formData = new FormData(event.target);
         const transactionData = {
             type: formData.get('type'),
@@ -216,26 +224,36 @@ function handleTransactionSubmit(event) {
         };
 
         // Validate transaction data
-        if (validateTransaction(transactionData)) {
-            // Add transaction
-            addTransaction(transactionData);
+        if (validateTransactionData(transactionData, true)) {
+            const newTransaction = addTransaction(transactionData);
 
-            // Close modal
-            closeModal();
+            if (newTransaction) {
+                closeModal();
 
-            // Refresh dashboard if on main page
-            if (typeof refreshDashboard === 'function') {
-                refreshDashboard();
+                if (typeof refreshDashboard === 'function') {
+                    refreshDashboard();
+                }
+
+                if (typeof loadTransactions === 'function' && typeof applyFilters === 'function') {
+                    loadTransactions();
+                    applyFilters();
+                }
+
+                showNotification('Transaction added successfully!', 'success');
+            } else {
+                throw new Error('Failed to save transaction');
             }
-
-            // Show success notification
-            showNotification('Transaction added successfully!', 'success');
         }
 
     } catch (error) {
         console.error('Error adding transaction:', error);
         showNotification('Failed to add transaction. Please try again.', 'error');
-    }
+    }  finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+        }
+ }
 }
 
 /**
@@ -261,36 +279,40 @@ function handleFilterSubmit(event) {
 /**
  * Validate transaction data
  */
-function validateTransaction(transaction) {
+function validateTransactionData(transaction, showErrors = true) {
     const errors = [];
 
-    // Validate type
     if (!transaction.type || !['income', 'expense'].includes(transaction.type)) {
         errors.push('Please select a valid transaction type');
     }
 
-    // Validate amount
-    if (!transaction.amount || transaction.amount <= 0) {
+    if (!transaction.amount || isNaN(transaction.amount) || transaction.amount <= 0) {
         errors.push('Please enter a valid amount greater than 0');
     }
 
-    // Validate category
     if (!transaction.category) {
         errors.push('Please select a category');
+    } else {
+        const category = getCategoryById(transaction.category);
+        if (!category || category.type !== transaction.type) {
+            errors.push('Selected category does not match transaction type');
+        }
     }
 
-    // Validate date
-    if (!transaction.date) {
-        errors.push('Please select a date');
+    if (!transaction.date || !isValidDate(transaction.date)) {
+        errors.push('Please select a valid date');
     }
 
-    // Show errors if any
-    if (errors.length > 0) {
+    if (errors.length > 0 && showErrors) {
         showNotification(errors.join('. '), 'error');
         return false;
     }
 
-    return true;
+    return errors.length === 0;
+}
+
+function validateTransaction(transaction) {
+    return validateTransactionData(transaction, true);
 }
 
 /**
@@ -405,5 +427,23 @@ window.addEventListener('unhandledrejection', function (e) {
 document.addEventListener('click', function (e) {
     if (e.target.id === 'notification-close') {
         hideNotification();
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const activeModal = document.querySelector('.modal.active');
+        if (activeModal) {
+            if (activeModal.id === 'edit-modal' && typeof closeEditModal === 'function') {
+                closeEditModal();
+            } else {
+                closeModal();
+            }
+        }
+    }
+    
+    if (event.ctrlKey && event.key === 'n' && document.getElementById('transactions-table')) {
+        event.preventDefault();
+        openAddTransactionModal();
     }
 });
