@@ -18,8 +18,8 @@
 </head>
 
 <body>
-    <header class="header" role="banner">
-        <nav class="nav" role="navigation" aria-label="Main navigation">
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation">
             <div class="nav-brand">
                 <h1 class="nav-title">FinanceTracker</h1>
             </div>
@@ -32,7 +32,7 @@
         </nav>
     </header>
     <!-- Main Content -->
-    <main class="main" role="main">
+    <main class="main">
         <!-- Hero Section with Balance Overview -->
         <section class="hero-section" aria-labelledby="balance-heading">
             <h2 id="balance-heading" class="visually-hidden">Financial Overview</h2>
@@ -104,7 +104,9 @@
             <section class="charts-section" aria-labelledby="charts-heading">
                 <h2 id="charts-heading">Financial Overview</h2>
                 <div class="chart-container">
-                    <canvas id="expense-chart" aria-label="Monthly expense breakdown chart"></canvas>
+                    <canvas id="expense-chart" width="400" height="200">
+                        Monthly expense breakdown chart
+                    </canvas>
                 </div>
             </section>
             <!-- Recent Transactions -->

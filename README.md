@@ -23,7 +23,8 @@ A modern, responsive financial tracking application built with vanilla HTML, CSS
 
 <div align="center">
 
-![Dashboard Preview](Assets/images/screenshots/dashboard-preview.png)
+![Dashboard Preview](Assets/images/screenshot/All-devises.png)
+
 *Personal Finance Dashboard displayed across multiple devices - showcasing responsive design*
 
 </div>
@@ -52,6 +53,27 @@ A modern, responsive financial tracking application built with vanilla HTML, CSS
 - **Advanced Search & Filtering:** Filter by date ranges, categories, amounts, and transaction types
 - **CSV Export:** Export transaction data for external analysis and record-keeping
 - **Responsive Design:** Mobile-first approach optimized for all screen sizes (320px to 1920px+)
+<div align="center">
+
+#### Functionality
+
+| Real-time Dashboard | Transaction Management |
+|------------------|----------------|
+| ![Real-time Dashboard](Assets/images/screenshot/Real-timeDashboard.png) | ![Transaction Management](Assets/images/screenshot/TransactionManagement.png) |
+---
+| Smart Categorization | CSV Export |
+|------------------|----------------|
+| ![Smart Categorization](Assets/images/screenshot/SmartCategorization.png) | ![CSV Export](Assets/images/screenshot/CSVExport.png) |
+---
+| Advanced Search  | Advanced Filtering |
+|-----------------|-----------------|
+| ![Advanced Search & Filtering1](Assets/images/screenshot/AdvancedSearch&Filtering1.png) | ![Advanced Search & Filtering2](Assets/images/screenshot/AdvancedSearch&Filtering2.png) |
+---
+| Responsive Design |
+|----------------------------------|
+| ![Mobile-first](Assets/images/screenshot/Mobile-first.png) |
+
+</div>
 
 ### Advanced Features
 - **Local Data Persistence:** Complete privacy with browser-based LocalStorage (no server required)
@@ -68,12 +90,36 @@ A modern, responsive financial tracking application built with vanilla HTML, CSS
 - **Analytics (pages/analytics.html):** Advanced insights with multiple chart types and financial recommendations
 - **Settings (pages/settings.html):** Category management and user preferences (expandable architecture)
 
+<div align="center">
+
+#### Pages
+
+| Dashboard | Transactions | Analytics | Settings |
+|------------|-----------|----------------|----------------|
+| ![Dashboard](Assets/images/screenshot/Dashboard(index.html).png) | ![Transactions](Assets/images/screenshot/transactions.htmlscreeen.png) | ![Analytics](Assets/images/screenshot/Analytics(p.html).png) | ![Settings](Assets/images/screenshot/Settingspages.html.png) |
+
+
+*Dedicated pages with detailed functions*
+
+</div>
+
 ### Interactive Components
 - **Modal-based Forms:** Add/Edit transactions with context-sensitive validation
 - **Dynamic Charts:** Pie charts for category breakdown, line charts for trends, bar charts for comparisons
 - **Intelligent Filters:** Auto-complete search with real-time results filtering
 - **Responsive Navigation:** Collapsible mobile menu with touch-optimized controls
 - **Contextual Help:** Inline guidance and tooltips for user assistance
+<div align="center">
+
+#### Dynamic Charts
+
+| Dynamic Charts |
+|-------------------------------------------------------|
+| ![Dynamic Charts](Assets/images/screenshot/DynamicCharts1.png) |
+
+*Dynamic Charts page with detailed functions*
+
+</div>
 
 ## Technologies Used
 
@@ -257,6 +303,41 @@ personal-finance-dashboard/
 - [x] Microsoft Edge (latest)
 - [x] Mobile browsers (iOS/Android)
 
+<div align="center">
+
+#### HTML - CSS - JavaScript Validation Results
+---
+| Test Type | Initial Result | Final Result |
+|-----------|---------------|--------------|
+| **index.html** | ![ValidatorError](Assets/images/screenshot/Dashboard.1.png) | ![Validator success](Assets/images/screenshot/Dashboard.2.png) |
+| **transaction.html** | ![ValidatorError](Assets/images/screenshot/Transactions.1.png) | ![Validator success](Assets/images/screenshot/Transactions.2.png) |
+| **settings.html** | ![ValidatorError](Assets/images/screenshot/Settings.1.png) | ![Validator success](Assets/images/screenshot/Settings.2.png) |
+| **analytics.html** | ![ValidatorError](Assets/images/screenshot/Analytics.1.png) | ![Validator success](Assets/images/screenshot/Analytics.2.png) |
+| **Links** | **[Validate Your HTML →](https://validator.w3.org/nu/#textarea)** | 
+*Before and after validation results showing successful error resolution*
+---
+| Test Type | Initial Result | Final Result |
+|-----------|---------------|--------------|
+| **styles.css** | ![No Error Validator]() | ![Validator success](Assets/images/screenshot/styles.css.2.png) |
+| **responsive.css** | ![ValidatorError](Assets/images/screenshot/responsive.css.1.png) | ![Validator success](Assets/images/screenshot/responsive.css.2.png) |
+| **components.css** | ![No Error Validator](assets/css/Sceenshots/HtmlPROBLEM.png) | ![Validator success](Assets/images/screenshot/components.css.2.png) |
+| **Links** | **[Validate Your CSS →](https://jigsaw.w3.org/css-validator/validator)** |
+*Before and after validation results showing successful error resolution*
+---
+| Test Type | Initial Result & Final Result |
+|-----------|------------------------------|
+| **utils.js** | ![Validator success](Assets/images/screenshot/utils.js.2.png) |
+| **transactions.js** | ![Validator success](Assets/images/screenshot/transactions.js.2.png) |
+| **storage.js** | ![Validator success](Assets/images/screenshot/storage.js.2.png) |
+| **script.js** | ![Validator success](Assets/images/screenshot/script.js.2.png) |
+| **dashboard.js** | ![Validator success](Assets/images/screenshot/dashboard.js.2.png) |
+| **charts.js** | ![Validator success](Assets/images/screenshot/charts.js.2.png) |
+| **analytics.js** | ![Validator success](Assets/images/screenshot/analytics.js.2.png) |
+| **Links** | **[Validate Your JShint →](https://jshint.com/)** |
+*Results showing successful resolution*
+
+</div>
+
 ## Deployment
 
 ### GitHub Pages (Recommended)
@@ -271,10 +352,22 @@ personal-finance-dashboard/
 
 #### Deployment Verification:
 
-✅ All pages accessible via HTTPS  
-✅ Chart.js CDN loads correctly  
-✅ LocalStorage functions properly  
-✅ Responsive design maintains integrity 
+- [x] All pages accessible via HTTPS  
+- [x] Chart.js CDN loads correctly  
+- [x] LocalStorage functions properly  
+- [x] Responsive design maintains integrity 
+
+<div align="center">
+
+#### Deployment Configuration
+
+| GitHub Pages Setup | Branch Configuration |
+|-------------------|---------------------|
+| ![GitHub Pages Setup](Assets/images/screenshot/GitHubPages.png) | ![GitHub Pages Setup](Assets/images/screenshot/All-deployments.png) |
+
+*GitHub Pages deployment configuration showing automated hosting setup*
+
+</div>
 
 ### Alternative Hosting Options
 - **Netlify:** One-click deployment
@@ -299,12 +392,32 @@ const PRODUCTION_CONFIG = {
   maxTransactionLimit: 1000,
   autoSaveInterval: 30000 // 30 seconds
 };
+```
 
 ## Credits
 
 ### External Libraries
 - **Chart.js:** Data visualization library (https://www.chartjs.org/)
 - Licensed under MIT License
+
+### Design Resources
+- **Color Palette:** Inspired by modern banking applications
+- **Icons:** Custom icon set for financial categories
+- **Typography:** System fonts for optimal performance
+
+### Development Tools
+- **Visual Studio Code:** Code editor
+- **Live Server Extension:** Local development server
+- **Chrome DevTools:** Testing and debugging
+
+### Learning Resources
+- **MDN Web Docs:** Web development reference
+- **Chart.js Documentation:** Data visualization guidance
+- **A11y Project:** Accessibility best practices
+
+---
+
+**Note:** This application stores all data locally in your browser. No personal financial information is transmitted to external servers, ensuring complete privacy and security of your financial data. 
 
 ### Design Resources & Code Attribution
 
@@ -419,7 +532,19 @@ const PRODUCTION_CONFIG = {
       cutout: '60%' // Custom financial dashboard styling
     }
   });
-  ```
+  - **Chart.js Community Examples:** [GitHub - Chart.js Samples](https://github.com/chartjs/Chart.js/tree/master/docs/samples)
+  - **Line Chart Implementation:**
+    
+    /* Line chart pattern from Chart.js samples - charts.js lines 105-145 */
+    datasets: [{
+      label: 'Income',
+      data: monthlyData.map(d => d.income),
+      borderColor: CHART_COLORS.success,
+      backgroundColor: CHART_COLORS.success + '20',
+      borderWidth: 3,
+      tension: 0.4
+    }]
+    ```
 
 #### **Open Source Dashboard Templates (Reference)**
 - **Fintech Dashboard Templates:** [GitHub Dashboard Templates](https://github.com/topics/dashboard-templates)
@@ -449,6 +574,30 @@ const PRODUCTION_CONFIG = {
 ### JavaScript Patterns & Code References
 
 #### **Modern JavaScript Patterns**
+- **JavaScript.info Tutorial:** [LocalStorage Tutorial](https://javascript.info/localstorage)
+- **Storage Implementation Patterns:**
+    ```javascript
+    /* LocalStorage wrapper pattern from JavaScript.info - storage.js lines 200-215 */
+    function safeJsonParse(jsonString, fallback = []) {
+      try {
+        return JSON.parse(jsonString) || fallback;
+      } catch (error) {
+        console.error('JSON parse error:', error);
+        return fallback;
+      }
+    }
+    ```
+
+- **MDN Web Docs:** [Fetch API and DOM Manipulation](https://developer.mozilla.org/en-US/docs/Web/API)
+  - **Event Handling Patterns:**
+    ```javascript
+    /* Modern event handling from MDN examples - script.js lines 45-65 */
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
+      setupEventListeners();
+    });
+    ```
+
 - **ES6+ Features Implementation:**
   ```javascript
   // Destructuring and arrow functions from modern JS best practices
@@ -456,12 +605,36 @@ const PRODUCTION_CONFIG = {
   const incomeTransactions = transactions.filter(t => t.type === 'income'); // storage.js line 156
   ```
 
-- **Async/Await Patterns:** Event handling and data operations
+#### **Stack Overflow Solutions**
+- **Modal Accessibility Implementation:** [Stack Overflow - Focus Management](https://stackoverflow.com/questions/27159179/how-to-manage-focus-in-modal-dialogs)
   ```javascript
-  // Modern event handling pattern in script.js lines 45-55
-  document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-  });
+  /* Focus trap implementation adapted from Stack Overflow - script.js lines 89-105 */
+  function openAddTransactionModal() {
+    const modal = document.getElementById('transaction-modal');
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    
+    // Focus first input (adapted from Stack Overflow solution)
+    const firstInput = modal.querySelector('input, select');
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 100);
+    }
+  }
+  ```
+
+- **LocalStorage Quota Detection:** [Stack Overflow - Storage Limits](https://stackoverflow.com/questions/2989284/how-to-detect-localstorage-support)
+  ```javascript
+  /* Storage quota check adapted from Stack Overflow - storage.js lines 45-55 */
+  function isLocalStorageAvailable() {
+    try {
+      const test = '__test__';
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
   ```
 
 #### **LocalStorage Implementation Patterns**
@@ -481,7 +654,7 @@ const PRODUCTION_CONFIG = {
 
 ### CSS Framework Inspirations
 
-#### **Bootstrap Grid Concepts**
+#### **Bootstrap Grid Concepts**[Bootstrap Grid System](https://getbootstrap.com/docs/5.0/layout/grid/)
 - **Responsive Grid System:** Adapted Bootstrap's grid principles without the framework
   ```css
   /* Bootstrap-inspired responsive grid in styles.css lines 180-195 */
@@ -491,6 +664,15 @@ const PRODUCTION_CONFIG = {
     gap: var(--spacing-lg);
   }
   ```
+- **Tailwind CSS Utilities:** [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+  - **Utility-First CSS Approach:** Color and spacing system inspiration
+    ```css
+    /* Tailwind-inspired utility system - styles.css lines 25-40 */
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */  
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    ```
 
 #### **Material Design Principles**
 - **Card Elevation and Shadows:**
@@ -521,14 +703,92 @@ const PRODUCTION_CONFIG = {
   - DOM manipulation best practices
 
 #### **CSS-Tricks Articles**
-- **Flexbox Guide:** Navigation and layout alignment patterns
-- **CSS Grid Guide:** Dashboard layout implementation
+- **Flexbox Guide:** [CSS-Tricks Flexbox Guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+  - **Navigation Layout:**
+    ```css
+    /* Flexbox pattern from CSS-Tricks - styles.css lines 128-135 */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    ```
+- **CSS Grid Guide:** [CSS-Tricks CSS Grid Guide](https://css-tricks.com/snippets/css/complete-guide-grid/)
+  - **Dashboard Layout:**
+    ```css
+    /* CSS Grid implementation from CSS-Tricks guide - styles.css lines 418-423 */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-2xl);
+    }
+    ```
 - **Custom Properties:** CSS variables usage throughout the stylesheet
 
 #### **YouTube Educational Content**
 - **"JavaScript Crash Course"** - Modern JS patterns used in the application
 - **"CSS Grid Tutorial"** - Layout techniques implemented in the dashboard
 - **"Chart.js Tutorial"** - Data visualization implementation guidance
+
+#### **ChatGPT Generated Code Segments**
+- **Date Utility Functions:** Generated and modified for financial date handling
+  ```javascript
+  /* ChatGPT generated date range calculation - utils.js lines 234-270 */
+  function getDateRange(period) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    switch (period) {
+      case 'today':
+        return {
+          start: today.toISOString().split('T')[0],
+          end: today.toISOString().split('T')[0]
+        };
+      case 'week':
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        // ... additional logic modified for project needs
+    }
+  }
+  ```
+  **Modifications Made:** Added financial-specific period handling, integrated with transaction filtering system
+
+- **Chart Color Generation:** Base algorithm from ChatGPT, customized for financial categories
+  ```javascript
+  /* ChatGPT generated color mapping - utils.js lines 310-325 */
+  function getCategoryColor(categoryId) {
+    const colors = {
+      food: '#FF6B6B',
+      transport: '#4ECDC4',
+      entertainment: '#45B7D1',
+      shopping: '#96CEB4'
+      // ... extended with financial-specific categories
+    };
+    return colors[categoryId] || colors.other;
+  }
+  ```
+  **Modifications Made:** Integrated T-Bank color palette, added financial category mappings
+
+- **Responsive Navigation Toggle:** ChatGPT base code, adapted for banking interface
+  ```css
+  /* ChatGPT responsive navigation pattern - responsive.css lines 25-45 */
+  @media (max-width: 768px) {
+    .nav {
+      flex-direction: column;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md);
+    }
+    .nav-menu {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+  ```
+  **Modifications Made:** Applied T-Bank design system variables, integrated banking-specific spacing
 
 ### Code Attribution Summary
 
@@ -546,10 +806,22 @@ const PRODUCTION_CONFIG = {
 - **dashboard.js:** 100% original financial calculation and display logic
 - **utils.js:** Currency formatting adapted from financial application examples
 
-### Typography & Icons
-- **System Fonts:** Platform-native fonts for optimal performance
-- **Category Icons:** Unicode emoji standard for financial categories
-- **Custom Color Mapping:** Original icon-to-color associations for categories
+### Icon Resources & Typography
+- **Unicode Emoji Standard:** Financial category icons (🍕, 🚗, 🎬, 💰)
+  - Source: [Unicode Emoji Charts](https://unicode.org/emoji/charts/)
+  - Implementation: Category visualization throughout the application
+- **System Font Stack:** Platform-optimized typography
+  ```css
+  /* System font implementation - styles.css lines 18-19 */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  ```
+
+  ### Quality Assurance References
+- **W3C HTML Validator:** Used for semantic markup validation
+- **W3C CSS Validator (Jigsaw):** Used for CSS standards compliance
+- **JSHint:** JavaScript code quality analysis
+- **WAVE Accessibility Checker:** Used for accessibility compliance testing
+- **Google PageSpeed Insights:** Performance optimization guidance
 
 ---
 

@@ -605,7 +605,7 @@
    High Contrast Mode
    =========================================== */
 
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   :root {
     --color-neon-green: #00ff00;
     --color-dark-green: #004d00;

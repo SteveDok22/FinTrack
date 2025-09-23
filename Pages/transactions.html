@@ -19,8 +19,8 @@
 
 <body>
     <!-- Header Section -->
-    <header class="header" role="banner">
-        <nav class="nav" role="navigation" aria-label="Main navigation">
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation">
             <div class="nav-brand">
                 <h1 class="nav-title">FinanceTracker</h1>
             </div>
@@ -34,7 +34,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main" role="main">
+    <main class="main">
         <!-- Page Header -->
         <section class="page-header">
             <div class="page-title-section">
@@ -257,6 +257,7 @@
                 <div class="form-group">
                     <label for="edit-transaction-type">Transaction Type</label>
                     <select id="edit-transaction-type" name="type" required>
+                        <option value="">Select type</option>
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
                     </select>
@@ -270,6 +271,7 @@
                 <div class="form-group">
                     <label for="edit-transaction-category">Category</label>
                     <select id="edit-transaction-category" name="category" required>
+                        <option value="">Select category</option>
                         <!-- Categories populated dynamically -->
                     </select>
                 </div>

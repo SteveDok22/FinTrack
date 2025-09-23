@@ -16,8 +16,8 @@
 </head>
 <body>
     <!-- Header Section -->
-    <header class="header" role="banner">
-        <nav class="nav" role="navigation" aria-label="Main navigation">
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation">
             <div class="nav-brand">
                 <h1 class="nav-title">FinanceTracker</h1>
             </div>
@@ -31,7 +31,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main" role="main">
+    <main class="main">
         <!-- Page Header -->
         <section class="page-header">
             <div class="page-title-section">
@@ -97,8 +97,8 @@
                     <h2 id="income-expense-heading">Income vs Expenses Trend</h2>
                     <p class="chart-description">Monthly comparison of income and spending</p>
                 </div>
-                <div class="chart-container">
-                    <canvas id="income-expenses-chart" aria-label="Income vs expenses line chart"></canvas>
+                <div class="chart-container" role="img" aria-labelledby="income-expense-heading">
+                    <canvas id="income-expenses-chart"></canvas>
                 </div>
             </section>
 
@@ -108,8 +108,8 @@
                     <h2 id="category-breakdown-heading">Spending Breakdown</h2>
                     <p class="chart-description">Expenses distributed by category</p>
                 </div>
-                <div class="chart-container">
-                    <canvas id="category-pie-chart" aria-label="Spending by category pie chart"></canvas>
+                <div class="chart-container" role="img" aria-labelledby="category-breakdown-heading">
+                    <canvas id="category-pie-chart"></canvas>
                 </div>
             </section>
 
@@ -119,8 +119,8 @@
                     <h2 id="spending-trends-heading">Monthly Spending Trends</h2>
                     <p class="chart-description">Track spending patterns over time</p>
                 </div>
-                <div class="chart-container">
-                    <canvas id="spending-trends-chart" aria-label="Monthly spending trends bar chart"></canvas>
+                <div class="chart-container" role="img" aria-labelledby="spending-trends-heading">
+                    <canvas id="spending-trends-chart"></canvas>
                 </div>
             </section>
 
